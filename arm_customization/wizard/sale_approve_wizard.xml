@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_approve_wizard_form" model="ir.ui.view">
+        <field name="name">sale.approve.wizard.form</field>
+        <field name="model">sale.approve.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Verify Items">
+                 <field name="sale_order_id" invisible="1"/>
+                <notebook>
+                    <page string="Verify Items" name="verify_items">
+                        <field name="verification_line_ids" widget="one2many">
+                            <tree string="Verify Items" editable="bottom" create="0" delete="0">
+                                <field name="configuration_id" column_invisible="1"/>
+                                <field name="name" readonly="1"/>
+                                <field name="is_verified" column_invisible="1"/>
+                                  <field name="stage" widget="badge" readonly="1"
+                                           decoration-success="stage == 'done'"/>
+                                <button type="object" name="action_verify" string="verify" class="btn-primary"  invisible="is_verified == True"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button type="object" name="action_done_process" string="Done" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sale_approve_wizard" model="ir.actions.act_window">
+        <field name="name">Verify Items</field>
+        <field name="res_model">sale.approve.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_sale_approve_wizard_form"/>
+    </record>
+</odoo>

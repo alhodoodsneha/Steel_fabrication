@@ -1,0 +1,26 @@
+<odoo>
+    <record id="purchase_order_line_price_comparison_pivot_view" model="ir.ui.view">
+        <field name="name">purchase.order.line.price.comparison.pivot</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Purchase Order Price Comparison">
+                <field name="product_id" type="row"/>
+                <field name="partner_id" type="col"/>
+                <field name="date_order"/>
+                <field name="price_unit" type="measure"/>
+                <field name="product_qty" type="measure"/>
+                <field name="price_subtotal" type="measure"/>
+                <field name="price_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_purchase_order_line_price_comparison" model="ir.actions.act_window">
+        <field name="name">Purchase Order Price Comparison</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="purchase_order_line_price_comparison_pivot_view"/>
+    </record>
+
+    <menuitem id="purchase_order_price_comparison_menu" name="Purchase Price Comparison" parent="purchase.menu_purchase_root" action="action_purchase_order_line_price_comparison"/>
+</odoo>

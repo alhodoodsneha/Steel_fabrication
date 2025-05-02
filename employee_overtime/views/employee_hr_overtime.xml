@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_hr_employee_over_time" model="ir.ui.view">
+        <field name="name">hr.employee.overtime.form.view</field>
+        <field name="model">hr.employee.overtime</field>
+        <field name="arch" type="xml">
+            <form string="Over Time">
+                <header>
+                     <field name="is_employee_manager" invisible="1"/>
+                    <field name="state" widget="statusbar"
+                           options="{'clickable': '0', 'fold_field': 'fold'}" readonly="1"/>
+                    <button name="approve_overtime" string="Approve" type="object"
+                            invisible="state != 'draft' or is_employee_manager==False" class="btn btn-success"/>
+                    <button name="refuse_over_time" string="reject" type="object"
+                            invisible="state != 'draft' or is_employee_manager==False" class="btn btn-danger"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="sequence" readonly="1"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="1"/>
+                            <field name="overtime_hours" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="date_assigned" readonly="1"/>
+                            <field name="is_public_holiday" invisible="1"/>
+                            <field name="is_done_payslip" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Reject Reason">
+                            <field name="reject_reason" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_employee_over_time_tree_view" model="ir.ui.view">
+        <field name="name">hr.employee.overtime.tree.view</field>
+        <field name="model">hr.employee.overtime</field>
+        <field name="arch" type="xml">
+            <tree string="OverTime" create="0" delete="0">
+                <field name="sequence" readonly="1"/>
+                <field name="employee_id" readonly="1"/>
+                <field name="overtime_hours" readonly="1"/>
+                 <field name="is_employee_manager" invisible="1"/>
+                <field name="state" readonly="1" widget="badge" decoration-danger="state == 'refused'"
+                       decoration-success="state == 'approved'" decoration-info="state == 'draft'"/>
+                <button name="approve_overtime" string="Approve" type="object"
+                        invisible="state != 'draft' or is_employee_manager==False" class="btn btn-success"/>
+                <button name="refuse_over_time" string="reject" type="object"
+                        invisible="state != 'draft' or is_employee_manager==False" class="btn btn-danger"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_employee_overtime_search_view" model="ir.ui.view">
+        <field name="name">hr.employee.overtime.search.view</field>
+        <field name="model">hr.employee.overtime</field>
+        <field name="arch" type="xml">
+            <search string="Search Over Time">
+                <field name="employee_id"/>
+                <field name="state" widget="statusbar"/>
+                <!-- Add custom filters if needed -->
+                <filter string="Waiting For Approval" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Refused" name="filter_refused" domain="[('state', '=', 'refused')]"/>
+                <separator/>
+                <group expand="0" name="group_by" string="Group By">
+                    <filter name="state_group_by" string="State" domain="[]" context="{'group_by' : 'state'}"/>
+                    <filter name="group_employee_id" string="Employee" context="{'group_by': 'employee_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_employee_hr_overtime" model="ir.actions.act_window">
+        <field name="name">OverTime</field>
+        <field name="res_model">hr.employee.overtime</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_employee_over_time_tree_view"/>
+        <field name="search_view_id" ref="hr_employee_overtime_search_view"/>
+        <field name="context">{'create': False,'delete': False}</field>
+    </record>
+
+    <menuitem id="menu_hr_overtime_employee_root"
+              name="Overtime"
+              active="True"
+              groups="employee_overtime.group_overtime_manager,employee_overtime.group_over_time_user"
+              web_icon="employee_overtime,static/description/overtime.png"
+              sequence="10">
+
+        <menuitem id="menu_employee_over_time"
+                  name="OverTime"
+                  action="action_employee_hr_overtime"
+                  sequence="10"/>
+    </menuitem>
+</odoo>

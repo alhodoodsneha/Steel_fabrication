@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_move_line_form_view_inherited_arm" model="ir.ui.view">
+        <field name="name">account.move.line.form.inherit.arm</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']"
+                   position="before">
+                <field name="inv_sl_line_id"/>
+                <field name="invoice_per"/>
+                <field name="project_id_inv" column_invisible="1"/>
+                <field name="boq_line" column_invisible="1"/>
+                <field name="adv_line" column_invisible="1"/>
+                <field name="retention_line" column_invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='aml_tab']" position="after">
+                <page id="other_details" string="Other Details" name="other_details">
+                    <group>
+                        <group>
+                            <field name="job_no"/>
+                            <field name="job_status"/>
+                            <field name="job_location"/>
+                            <field name="lpo_no"/>
+                            <field name="cont_ref"/>
+                            <field name="po_value"/>
+                            <field name="wrk_dn_period"/>
+                            <field name="pi_prepared_by"/>
+                            <field name="net_amount_due_date_to_date"/>
+                            <field name="net_amount_due_date_previous" readonly="1"/>
+                            <field name="prepared_by"/>
+                            <field name="Designation"/>
+                        </group>
+                        <group>
+                            <field name="project_job_id"
+                                   readonly="1"/>
+                            <field name="project_job"/>
+                            <field name="division_job"/>
+                            <field name="gross_wrk_credit_to_date"/>
+                            <field name="gross_wrk_credit_previous" readonly="1"/>
+                            <field name="less_advance_to_date"/>
+                            <field name="less_advance_previous" readonly="1"/>
+                            <field name="less_advance_this_month"/>
+                            <field name="less_retention_previous" readonly="1"/>
+                            <field name="less_retention_to_date"/>
+                            <field name="less_retention_this_month"/>
+                            <field name="subtotal_to_date"/>
+                            <field name="subtotal_previous" readonly="1"/>
+                            <field name="vat_to_date"/>
+                            <field name="vat_previous" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='delivery_date']" position="after">
+                <field name="previous_invoice_ids" widget="many2many_tags"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

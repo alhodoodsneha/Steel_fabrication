@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="document_res_partner_views_inherited" model="ir.ui.view">
+        <field name="name">res.partner.view.form.inherit.document.expiry</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <div class="oe_button_box" position="inside">
+                <button class="oe_stat_button" name="action_document_view"
+                        type="object" icon="fa-list-ol">
+                    <field string="Documents" name="document_count"
+                           widget="statinfo"/>
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

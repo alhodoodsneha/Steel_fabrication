@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <template id="report_delivery_project">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <t t-set="lang" t-value="doc.partner_id.lang"/>
+                        <div t-attf-class="header" t-att-style="report_header_style">
+                            <div class="row">
+                                <div class="col-12" style="text-align: left;">
+                                    <div class="doc.company_id-logo" style="text-align: left;">
+                                        <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
+                                             style="max-height: 99px;align-content:left !important;width:100%;"
+                                             alt="Logo"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="border-top: 1px solid lightgray; margin-bottom: 10px;"></div>
+                        </div>
+                        <div class="page">
+                            <div class="text-center" style="color:#0b104f;">
+                                <strong>
+                                    <h2>Delivery Note</h2>
+                                </strong>
+                            </div>
+                            <table style="width: 100%;border: 1px solid #f8f8f8;">
+                                <thead>
+                                    <tr>
+                                        <td colspan="6"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:50%;">
+
+                                            <span style="padding-left:10px;font-size:13px;">Deliver From:</span>
+                                            <p style="padding-left:15px;">
+                                                <strong t-esc="doc.company_id.name"/>
+                                            </p>
+                                            <p style="padding-left:20px;">
+                                                <t t-esc="doc.company_id.street"/>,
+                                                <t t-esc="doc.company_id.city"/>,
+                                                <t t-esc="doc.company_id.state_id.name"/>,<t
+                                                    t-esc="doc.company_id.country_id.name"/>,
+                                                <t t-esc="doc.company_id.zip"/>
+                                            </p>
+                                            <p style="padding-left:20px;">Phone:
+                                                <t t-esc="doc.company_id.phone"/>
+                                            </p>
+
+                                        </td>
+                                        <td colspan="6"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:50%;">
+
+                                            <span style="padding-left:10px;font-size:13px;">Deliver To:</span>
+                                            <p style="padding-left:15px;">
+                                                <strong t-esc="doc.partner_id.name"/>
+                                            </p>
+                                            <p style="padding-left:20px;"><t t-esc="doc.partner_id.street"/>,
+                                                <t t-esc="doc.partner_id.city"/>,
+                                                <t t-esc="doc.partner_id.state_id.name"/>,
+                                                <t t-esc="doc.partner_id.country_id.name"/>,
+                                                <t t-esc="doc.partner_id.zip"/>
+                                            </p>
+                                            <p style="padding-left:20px;">Phone:
+                                                <t t-esc="doc.partner_id.phone"/>
+                                            </p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Deliver Note No:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.code"/>
+                                            </span>
+
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Deliver Date:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.delivery_date"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Dispatch Document No:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.dispatch_doc_no"/>
+                                            </span>
+
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Dispatch Through:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.dispatch_through"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Destination:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.destination"/>
+                                            </span>
+
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Container No and Seal No:
+                                            </span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.container_no_seal_no"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Delivery Mode:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.delivery_mode"/>
+                                            </span>
+
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Project:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.project_id.name"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">LPO Number:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.lpo_number"/>
+                                            </span>
+
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">LPO Date:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.lpo_date"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">LPO Number:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.lpo_number"/>
+                                            </span>
+
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">LPO Date:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.lpo_date"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Sale Order:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.sale_order_id.name"/>
+                                            </span>
+
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">Project Location:</span>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:25%;">
+                                            <span style="padding-left:10px;font-size:13px;">
+                                                <t t-esc="doc.location"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="12"
+                                            style="border: 1px solid #f8f8f8; text-align: left; font-weight: bold;background-color:#e5e5e5;width:100%;">
+                                            <span style="padding-left:10px;font-size:13px;"> <t t-esc="doc.terms_of_delivery"/></span>
+                                        </td>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                            <table style="width: 100%;border: 1px solid #f8f8f8;">
+                                <thead>
+                                    <tr>
+                                        <th style="border: 1px solid #f8f8f8;width:66.6%;height:30px;vertical-align: middle;text-align: center;background-color:#e8960b;"
+                                            colspan="8">Description Of Goods
+                                        </th>
+                                        <th style="border: 1px solid #f8f8f8;width:33.4%;height:30px;vertical-align: middle;text-align: center;background-color:#e8960b;"
+                                            colspan="4">Quantity
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <t t-set="total_qty" t-value="0"/>
+                                <tbody style="border: 1px solid  black;">
+                                    <t t-foreach="doc.delivery_line_ids" t-as="line">
+                                        <tr style="border: 1px solid black;">
+                                            <td style="border: 1px solid black;width:66.6%;padding-left:20px;">
+                                                <t t-esc="line.product_id.name"/>
+                                            </td>
+                                            <td style="border: 1px solid black;width:33.4%;text-align:right;padding-right:5px;"
+                                                colspan="8">
+                                                <t t-esc="line.quantity"/>
+                                            </td>
+                                        </tr>
+                                        <t t-set="total_qty" t-value="total_qty + line.quantity"/>
+                                    </t>
+                                    <t t-set="payments_vals" t-value="doc.delivery_line_ids.ids"></t>
+                                    <t t-if="len(payments_vals) &lt; 15">
+                                        <t t-set="extra_rows" t-value="15 - len(payments_vals)"/>
+                                        <t t-foreach="range(extra_rows)" t-as="i">
+                                            <tr style="border-left: 1px solid black;border-right: 1px solid black;border-bottom:0px !important;border-top:0px !important;">
+                                                <td style="border-left: 1px solid black;border-right: 1px solid black;border-bottom:0px !important;border-top:0px !important;width:66.6%;padding-right:5px;text-align:right;height:20px;">
+
+                                                </td>
+                                                <td style="border-left: 1px solid black;border-right: 1px solid black;border-bottom:0px !important;border-top:0px !important;width:33.4%;padding-right:5px;text-align:right;height:20px;"
+                                                    colspan="8">
+
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <tr style="border: 1px solid black;">
+                                                <td style="border: 1px solid black;width:66.6%;padding-right:5px;text-align:right;">
+                                                    Total Quantity:
+                                                </td>
+                                                <td style="border: 1px solid black;width:33.4%;padding-right:5px;text-align:right;"
+                                                    colspan="8">
+                                                    <t t-esc="total_qty"/>
+                                                </td>
+                                            </tr>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <table style="width: 100%;border: 1px solid black;">
+                                <thead style="border: 1px solid black;">
+                                    <tr style="border: 1px solid black;">
+                                        <th style="border: 1px solid black;width:25%;height:30px;vertical-align: middle;text-align: center;background-color:#f8f8f8;"
+                                            colspan="8">Vehicle No
+                                        </th>
+                                        <th style="border: 1px solid black;width:25%;height:30px;vertical-align: middle;text-align: center;background-color:#f8f8f8;"
+                                            colspan="4">Driver's Name
+                                        </th>
+                                        <th style="border: 1px solid black;width:25%;height:30px;vertical-align: middle;text-align: center;background-color:#f8f8f8;"
+                                            colspan="8">Driver's Mobile No
+                                        </th>
+                                        <th style="border: 1px solid black;width:25%;height:30px;vertical-align: middle;text-align: center;background-color:#f8f8f8;"
+                                            colspan="4">Port Of Loading
+                                        </th>
+                                    </tr>
+                                    <tr style="border: 1px solid black;">
+                                        <th style="border: 1px solid black;width:25%;height:30px;vertical-align: middle;text-align: center;background-color:#f8f8f8;"
+                                            colspan="8">
+                                            <t t-esc="doc.vehicle_no"/>
+                                        </th>
+                                        <th style="border: 1px solid black;width:25%;height:30px;vertical-align: middle;text-align: center;background-color:#f8f8f8;"
+                                            colspan="4">
+                                            <t t-esc="doc.drivers_name"/>
+                                        </th>
+                                        <th style="border: 1px solid black;width:25%;height:30px;vertical-align: middle;text-align: center;background-color:#f8f8f8;"
+                                            colspan="8">
+                                            <t t-esc="doc.drivers_mobile"/>
+                                        </th>
+                                        <th style="border: 1px solid black;width:25%;height:30px;vertical-align: middle;text-align: center;background-color:#f8f8f8;"
+                                            colspan="4">
+                                            <t t-esc="doc.port_of_loading"/>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <br></br>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>
+                                        <strong>Store Keeper Signature and Stamp:</strong>
+                                        <br></br>
+                                        <br></br>
+                                        <span
+                                                style="border-bottom: 1px dotted #000; width: 85%; display: inline-block;padding-left:10px;"/>
+                                    </p>
+                                </div>
+                                <div class="col-4">
+                                    <p>
+                                        <strong>Driver's Signature:</strong>
+                                          <br></br>
+                                          <br></br>
+                                        <span
+                                                style="border-bottom: 1px dotted #000; width: 85%; display: inline-block;padding-left:10px;"/>
+                                    </p>
+                                </div>
+                                <div class="col-4">
+                                    <p style="font-size:12px;">
+                                        <br></br>
+                                          <br></br>
+                                        <strong>Note:see overleaf for Terms and Conditions</strong>
+
+                                    </p>
+                                </div>
+                            </div>
+                            <br></br>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>
+                                        <strong>Receiver's Name:</strong>
+                                          <br></br>
+                                          <br></br>
+                                        <span
+                                                style="border-bottom: 1px dotted #000; width: 85%; display: inline-block;padding-left:10px;"/>
+                                    </p>
+                                </div>
+                                <div class="col-4">
+                                    <p>
+                                        <strong>Receiver's Signature:</strong>
+                                          <br></br>
+                                          <br></br>
+                                        <span
+                                                style="border-bottom: 1px dotted #000; width: 85%; display: inline-block;padding-left:10px;"/>
+                                    </p>
+                                </div>
+                                <div class="col-4">
+                                    <p>
+                                        <strong>Receiver's Company Stamp:</strong>
+                                          <br></br>
+                                          <br></br>
+                                        <span
+                                                style="border-bottom: 1px dotted #000; width: 85%; display: inline-block;padding-left:10px;"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div t-attf-class="footer o_standard_footer">
+                            <div class="text-center">
+                                <div style="border-top: 2px solid #e94646; margin-bottom: 10px;"></div>
+                                <ul class="list-inline"
+                                    style="display: flex; padding: 0; list-style-type: none; justify-content: center;">
+
+                                    <i class="fa fa-mobile" style="color:#e94646;">&amp;nbsp;
+                                        <span t-esc="doc.company_id.phone" style="margin-right: 2px;"/>
+                                    </i>&amp;nbsp;
+                                    <i class="fa-map-marker" style="color:#e94646;">&amp;nbsp;
+                                        <span>P.O.Box:60511,Sharjah,United Arab Emirates</span>
+                                    </i>&amp;nbsp;
+                                    <i class="fa-envelope" style="color:#e94646;">&amp;nbsp;
+                                        <span>info@armmetal.ae</span>
+                                    </i>
+                                </ul>
+                                <div t-if="report_type == 'pdf'" class="text-muted">
+                                    Page:
+                                    <span class="page"/>
+                                    of
+                                    <span class="topage"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="report_project_delivery" model="ir.actions.report">
+            <field name="name">Delivery Note</field>
+            <field name="model">project.delivery</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">arm_customization.report_delivery_project</field>
+            <field name="report_file">arm_customization.report_delivery_project</field>
+            <field name="print_report_name">'Delivery Note - %s' % (object.code)</field>
+            <field name="binding_model_id" ref="arm_customization.model_project_delivery"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

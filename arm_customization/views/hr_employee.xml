@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_inherited_abm" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.abm</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='barcode']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='identification_group']/div[hasclass('o_row')]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//h2" position="after">
+                <label for="barcode"/>
+                <div class="o_row">
+                    <field name="barcode" readonly="1"/>
+                    <button string="Generate" class="btn btn-link" type="object" name="generate_random_barcode"
+                            invisible="1"/>
+                    <button name="%(hr.hr_employee_print_badge)d" string="Print Badge" class="btn btn-link"
+                            type="action"
+                            invisible="not barcode"/>
+                </div>
+            </xpath>
+            <xpath expr="//header/button" position="after">
+                <button string="Update" class="btn btn-primary" type="object" name="action_update_badge"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

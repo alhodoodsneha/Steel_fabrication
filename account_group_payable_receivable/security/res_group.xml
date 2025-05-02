@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="res.groups" id="group_account_receivable">
+        <field name="name">Hide Account Receivable</field>
+    </record>
+
+     <record model="res.groups" id="group_account_payable">
+        <field name="name">Hide Account Payable</field>
+    </record>
+
+</odoo>

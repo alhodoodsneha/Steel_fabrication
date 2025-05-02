@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+       <record id="deferred_revenue_wizard_form_view" model="ir.ui.view">
+        <field name="name">deferred.revenue.wizard.form.view</field>
+        <field name="model">deferred.revenue.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Deferred Revenue Creation">
+                <group>
+                    <field name="account_move_id" readonly="1"  no_label="1"/>
+                </group>
+               <group>
+                     <group>
+                         <field name="start_date" required="1"/>
+                         <field name="journal_id" required="1"/>
+                         <field name="amount" required="1"/>
+                         <field name="partner_id" required="1"/>
+                     </group>
+                   <group>
+                        <field name="end_date" required="1"/>
+                         <field name="period" required="1"/>
+                        <field name="credit_acc" required="1"/>
+                        <field name="debit_acc" required="1"/>
+                   </group>
+               </group>
+                <footer>
+                    <button name="action_create_deferred" type="object"
+                            string="Generate Lines" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <record id="action_deferred_revenue_wizard" model="ir.actions.act_window">
+        <field name="name">Deferred Revenue Wizard</field>
+        <field name="res_model">deferred.revenue.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="deferred_revenue_wizard_form_view"/>
+    </record>
+</odoo>

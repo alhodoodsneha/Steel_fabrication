@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_form_engineering_team" model="ir.ui.view">
+        <field name="name">engineering.team.member.form.view</field>
+        <field name="model">engineering.team.member</field>
+        <field name="arch" type="xml">
+            <form string="Engineering Team">
+                <header>
+                </header>
+                <sheet>
+                    <label for="name"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="team_manager_id"/>
+                            <field name="team_member_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_engineering_team" model="ir.ui.view">
+        <field name="name">engineering.team.member.tree.view</field>
+        <field name="model">engineering.team.member</field>
+        <field name="arch" type="xml">
+            <tree string="Engineer Team" create="1" delete="1">
+                <field name="name"/>
+                <field name="team_manager_id"/>
+                <field name="team_member_ids"  widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- Action to open the list view of estimation model -->
+    <record id="action_engineering_team" model="ir.actions.act_window">
+        <field name="name">Engineering Team</field>
+        <field name="res_model">engineering.team.member</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_tree_engineering_team"/>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Engineering team
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="Engineering Team"
+            id="menu_engineering_team"
+            parent="project.menu_project_config"
+            action="action_engineering_team"
+            sequence="12"
+    />
+
+</odoo>

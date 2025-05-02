@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_joining_letter_template">
+            <t t-call="web.basic_layout">
+                <div t-attf-class="header" t-att-style="report_header_style">
+                    <div class="row">
+                        <div class="col-6" style="text-align: left;">
+                            <div class="o.company_id-logo" style="text-align: left;">
+                                <img t-if="env.company.logo" t-att-src="image_data_uri(env.company.logo)"
+                                     style="max-height: 99px;align-content:center !important;" alt="Logo"/>
+                            </div>
+                        </div>
+                        <div class="col-6" style="text-align: right;">
+                            <div class="company-info">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <t t-esc="env.company.partner_id"
+                                           t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                                    </li>
+                                    <li t-if="forced_vat">
+                                        <t t-esc="env.company.country_id.vat_label or 'Tax ID'"/>:
+                                        <span t-esc="forced_vat"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid lightgray; margin-bottom: 10px;"></div>
+                </div>
+                <div class="mt-0">
+                    <div class="page">
+                        <h2 style="text-align: center;">NEW JOINING REPORT</h2>
+                        <br></br>
+                        <div class="into_page" style="position: relative; height: 100%; width: 100%;padding-left:30px;">
+                            <span>I <strong><t t-esc="o.partner_name"/></strong> Designation <strong><t t-esc="o.job_id.name"/></strong>
+                            hereby report myself for the duty this day in <strong><t t-esc="env.company.name"/></strong>
+                            </span>
+                        </div>
+                        <br/>
+                        <div style="text-align:right">
+                            <span>Signature of the Employee</span>
+                        </div>
+                        <br></br>
+                        <div class="detail_page" style="position: relative; height: 100%; width: 100%;padding-left:30px;">
+                            <span>Name: <strong><t t-esc="o.partner_name"/> </strong></span><br></br>
+                            <span>Employee Code No: <strong> </strong></span><br></br>
+                            <span>Designation: <strong><t t-esc="o.job_id.name"/> </strong></span><br></br>
+                            <span>Contact Number: <strong><t t-esc="o.partner_phone"/> </strong></span><br></br>
+                            <span>Passport Handover date: <strong> </strong></span><br></br>
+                            <span>passport No: <strong></strong></span><br></br>
+                        </div>
+                        <br></br>
+                        <div style="position: relative; height: 100%; width: 100%;padding-left:30px;"
+                             class="thanks_page">
+                            <br></br>
+                            Approved by
+                        </div>
+
+                    </div>
+                </div>
+                <div t-attf-class="footer o_standard_footer">
+                    <div class="text-center">
+                        <div style="border-top: 2px solid black; margin-bottom: 10px;"></div>
+                        <div t-if="report_type == 'pdf'" class="text-muted">
+                            Page:
+                            <span class="page"/>
+                            of
+                            <span class="topage"/>
+                        </div>
+                        <div t-if="report_type == 'pdf' and display_name_in_footer" class="text-muted">
+                            <span t-field="o.name"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_joining_letter">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="hr_recruitment_customization.report_joining_letter_template"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

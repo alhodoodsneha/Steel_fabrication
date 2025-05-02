@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_form_project_planning" model="ir.ui.view">
+        <field name="name">project.planning.form.view</field>
+        <field name="model">project.planning</field>
+        <field name="arch" type="xml">
+            <form string="Project Planning">
+                <header>
+                     <button name="action_verify_planning" type="object" groups="arm_customization.group_project_planning_manager"
+                        string="Verify" class="btn-primary" invisible="is_verified == True"/>
+                      <field name="status" widget="statusbar"
+                           options="{'clickable': '0'}" readonly="1"/>
+                </header>
+                <sheet>
+                    <label for="name"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="is_verified == True"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project" readonly="is_verified == True"/>
+                            <field name="display_name" invisible="1"/>
+                            <field name="is_verified" invisible="1"/>
+                            <field name="type" readonly="is_verified == True"/>
+                        </group>
+                        <group>
+                            <field name="start_date" readonly="is_verified == True"/>
+                            <field name="end_date" readonly="is_verified == True"/>
+                            <field name="actual_start_date"/>
+                            <field name="actual_end_date"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                      <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_form_project_planning_type" model="ir.ui.view">
+        <field name="name">project.planning.type.form.view</field>
+        <field name="model">project.planning.type</field>
+        <field name="arch" type="xml">
+            <form string="Planning Type">
+                <header>
+                </header>
+                <sheet>
+                    <label for="name"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_project_planning" model="ir.ui.view">
+        <field name="name">project.planning.tree.view</field>
+        <field name="model">project.planning</field>
+        <field name="arch" type="xml">
+            <tree string="Project Planning" create="1" delete="1">
+                <field name="display_name" column_invisible="1"/>
+                <field name="name"/>
+                <field name="type"/>
+                <field name="project"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_calendar_project_planning" model="ir.ui.view">
+        <field name="name">project.planning.calendar.view</field>
+        <field name="model">project.planning</field>
+        <field name="arch" type="xml">
+            <calendar string="Project Planning" date_start="start_date" date_stop="end_date" color="project">
+                <field name="name"/>
+                <field name="type"/>
+            </calendar>
+        </field>
+    </record>
+
+
+    <record id="view_kanban_project_planning" model="ir.ui.view">
+        <field name="name">project.planning.kanban.view</field>
+        <field name="model">project.planning</field>
+        <field name="arch" type="xml">
+            <kanban readonly="1" default_order="end_date" default_group_by="end_date:day">
+                <field name="display_name" readonly="1"/>
+                <field name="type"/>
+                <field name="name"/>
+                <field name="project"/>
+                <field name="start_date" readonly="1"/>
+                <field name="end_date" readonly="1"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_details oe_kanban_global_click oe_kanban_content oe_kanban_card">
+                            <div class="o_kanban_card_header">
+                                <strong>
+                                    <i class="fa fa-tasks" style="padding-right: 5px;color:green;" title="Flask"></i>
+                                    <field name="display_name" style="color:#4d662f;"/>
+                                </strong>
+                            </div>
+                            <div class="o_kanban_primary_left" style="padding-left: 10px;">
+                                <div>
+                                    <span class="fa fa-tasks me-2" aria-label="Project" title="Project"></span>
+                                    <t t-esc="record.project.value"/>
+                                </div>
+                                <div class="text-muted o_row">
+                                    <span class="fa fa-clock-o me-2" title="Dates"></span>
+                                    <field name="start_date"/>
+                                    <i class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon"
+                                       title="Arrow"/>
+                                    <field name="end_date"/>
+                                </div>
+                                <div style="padding-top: 5px;color:#21d4dd;">
+                                    <strong>Type:</strong>
+                                    <field name="type"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_tree_project_planning_type" model="ir.ui.view">
+        <field name="name">project.planning.type.tree.view</field>
+        <field name="model">project.planning.type</field>
+        <field name="arch" type="xml">
+            <tree string="Planning Type" create="1" delete="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_search_project_planning" model="ir.ui.view">
+        <field name="name">project.planning.search.view</field>
+        <field name="model">project.planning</field>
+        <field name="arch" type="xml">
+            <search string="Search Project Planning">
+                <field name="display_name"/>
+                <field name="name"/>
+                <field name="type"/>
+                <field name="project"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_project" string="Project" context="{'group_by': 'project'}"/>
+                    <filter name="group_by_type" string="Type" context="{'group_by': 'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="action_project_planing" model="ir.actions.act_window">
+        <field name="name">Project Planning</field>
+        <field name="res_model">project.planning</field>
+        <field name="search_view_id" ref="view_search_project_planning"/>
+        <field name="view_mode">tree,form,kanban,calendar</field>
+        <field name="view_id" ref="view_tree_project_planning"/>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Planning
+            </p>
+        </field>
+    </record>
+
+    <!-- Action to open the list view of estimation model -->
+    <record id="action_project_planing_type" model="ir.actions.act_window">
+        <field name="name">Planning Type</field>
+        <field name="res_model">project.planning.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_tree_project_planning_type"/>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Planning Type
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="Project Planning"
+            id="menu_project_planning_root"
+            groups="arm_customization.group_project_planning_user,arm_customization.group_project_planning_manager"
+            active="True"
+            web_icon="arm_customization,static/description/iconp.png"
+            sequence="10">
+
+        <menuitem id="menu_project_planning"
+                  name="Project Planning"
+                  action="action_project_planing"
+                  groups="arm_customization.group_project_planning_user,arm_customization.group_project_planning_manager"
+                  sequence="10"/>
+        <menuitem id="menu_project_planning_configuration"
+                  name="Configuration"
+                  groups="arm_customization.group_project_planning_manager"
+                  sequence="30">
+            <menuitem id="menu_project_planning_type"
+                      name="Planning Type"
+                      action="action_project_planing_type"
+                      sequence="10"/>
+
+        </menuitem>
+    </menuitem>
+</odoo>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_inherited_abm_for_payslip" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit.abm.for.pay.type</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <field name="contract_id" position="after">
+                <field name="payed_type"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_hr_payslip_inherited_abm_for_payslip" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit.abm.for.pay.type</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <field name="contract_id" position="after">
+                <field name="payed_type"/>
+            </field>
+        </field>
+    </record>
+
+    <template id="report_payslip_inherited_arm"
+              inherit_id="hr_payroll_community.report_payslip">
+        <xpath expr="//p[hasclass('text-right')]" position="after">
+
+            <div class="row" style="page-break-inside: avoid;">
+                <div class="col-6">
+                    <p>
+                        <strong>Prepared By:</strong>
+                        <br></br>
+                        <br></br>
+                        <span
+                                style="border-bottom: 1px dotted #000; width: 85%; display: inline-block;padding-left:10px;"/>
+                    </p>
+                </div>
+                <div class="col-6">
+                    <p style="padding-left:50px;">
+                        <strong>Approved By:</strong>
+                        <br></br>
+                        <br></br>
+                        <span
+                                style="border-bottom: 1px dotted #000; width: 85%; display: inline-block;padding-left:10px;"/>
+                    </p>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="report_payslip_inherited_arm_payroll"
+              inherit_id="hr_payroll_community.report_payslipdetails">
+        <xpath expr="//p[hasclass('text-right')]" position="after">
+
+            <div class="row" style="page-break-inside: avoid;">
+                <div class="col-6">
+                    <p>
+                        <strong>Prepared By:</strong>
+                        <br></br>
+                        <br></br>
+                        <span
+                                style="border-bottom: 1px dotted #000; width: 85%; display: inline-block;padding-left:10px;"/>
+                    </p>
+                </div>
+                <div class="col-6">
+                    <p style="padding-left:50px;">
+                        <strong>Approved By:</strong>
+                        <br></br>
+                        <br></br>
+                        <span
+                                style="border-bottom: 1px dotted #000; width: 85%; display: inline-block;padding-left:10px;"/>
+                    </p>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

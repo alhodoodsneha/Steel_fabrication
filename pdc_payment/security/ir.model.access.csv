@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pdc_payment_submit,pdc.payment.submit,model_pdc_payment_submit,,1,1,1,1
+access_pdc_payment_received,pdc.payment.received,model_pdc_payment_received,,1,1,1,1
+access_pdc_reason_receive_wizard,pdc.reason.receive.wizard,model_pdc_reason_receive_wizard,,1,1,1,1
+access_pdc_reason_wizard,pdc.reason.wizard,model_pdc_reason_wizard,,1,1,1,1
+access_pdc_reason_receive_hold_wizard,pdc.reason.receive.hold.wizard,model_pdc_reason_receive_hold_wizard,,1,1,1,1
+
+

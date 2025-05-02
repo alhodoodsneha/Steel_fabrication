@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_view_work_order_task" model="ir.actions.act_window">
+        <field name="name">Work Orders</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="project.view_task_kanban"/>
+        <field name="search_view_id" ref="project.view_task_search_form"/>
+        <field name="domain">[('_is_work_task', '=', True)]</field>
+        <field name="context">{'create': False,'delete': False,'default__is_work_task': True,
+            'search_default_open_tasks': 1}
+        </field>
+        <field name="help" type="html">
+            <p>
+                Create and manage your work order
+            </p>
+        </field>
+    </record>
+
+    <record id="action_view_work_order_project" model="ir.actions.act_window">
+        <field name="name">Job Order</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_id" ref="project.project_kanban_view_group_stage"/>
+        <field name="domain">[('_work_order_prj', '=', True),('type_project','=','post_tender')]</field>
+        <field name="context">{'create': False,'delete': False,}</field>
+        <field name="help" type="html">
+            <p>
+                Create and manage your project work order
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="Job Order"
+            id="menu_work_order_root"
+            active="True"
+            groups="arm_customization.group_work_order_user,arm_customization.group_work_order_manager,arm_customization.group_engineering_manager,arm_customization.group_engineering_user"
+            web_icon="arm_customization,static/description/iconw.png"
+            sequence="10">
+
+        <menuitem id="menu_work_order_project"
+                  name="Job Order"
+                  action="action_view_work_order_project"
+                  sequence="10"/>
+
+        <menuitem id="menu_work_order_task"
+                  name="Work Orders"
+                  action="action_view_work_order_task"
+                  sequence="12"/>
+
+    </menuitem>
+</odoo>

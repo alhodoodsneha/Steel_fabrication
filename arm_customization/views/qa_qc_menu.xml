@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_view_qa_qc_wrk_task" model="ir.actions.act_window">
+        <field name="name">QA/QC Task</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="project.view_task_kanban"/>
+        <field name="search_view_id" ref="project.view_task_search_form"/>
+        <field name="domain">[('is_qa_qc_task', '=', True)]</field>
+        <field name="context">{'create': False,'delete': False,'default_is_qa_qc_task': True,
+            'search_default_open_tasks': 1}
+        </field>
+        <field name="help" type="html">
+            <p>
+                Create and manage your QA/Qc
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="QA/QC"
+            id="menu_qa_qc_root"
+            active="True"
+            groups="arm_customization.group_qa_qc_manager,arm_customization.group_qa_qc_user"
+            web_icon="arm_customization,static/description/iconqc.png"
+            sequence="10">
+
+        <menuitem id="menu_qc_wrk_task"
+                  name="QA/Qc Task"
+                  action="action_view_qa_qc_wrk_task"
+                  sequence="12"/>
+
+    </menuitem>
+</odoo>

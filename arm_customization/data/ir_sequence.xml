@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_project_code" model="ir.sequence">
+            <field name="name">Project Code</field>
+            <field name="code">project.project</field>
+            <field name="prefix">JOB/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_task_estimation" model="ir.sequence">
+            <field name="name">Estimation Task Sequence</field>
+            <field name="code">project.task.estimation</field>
+            <field name="prefix">EST/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!-- Sequence for Work Order Tasks -->
+
+        <record id="seq_crm_lead_code" model="ir.sequence">
+            <field name="name">Lead Sequence</field>
+            <field name="code">crm.lead</field>
+            <field name="prefix">INQ/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_customer_code" model="ir.sequence">
+            <field name="name">Customer Sequence</field>
+            <field name="code">res.partner.customer</field>
+            <field name="prefix">CUS/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!-- Sequence for Suppliers -->
+        <record id="seq_supplier_code" model="ir.sequence">
+            <field name="name">Supplier Sequence</field>
+            <field name="code">res.partner.supplier</field>
+            <field name="prefix">SUP/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_boq_material_estimation" model="ir.sequence">
+            <field name="name">BOQ Material</field>
+            <field name="code">boq.material.sequence</field>
+            <field name="prefix"></field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_project_work_order" model="ir.sequence">
+            <field name="name">Project Work Order</field>
+            <field name="code">project.work.sequence</field>
+            <field name="prefix">PRJ/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
+
+        <record id="seq_emp_badge" model="ir.sequence">
+            <field name="name">Employee Badge</field>
+            <field name="code">emp.badge.sequence</field>
+            <field name="prefix">EMP/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_work_order_task" model="ir.sequence">
+            <field name="name">Work Order Task</field>
+            <field name="code">project.task.work.order</field>
+            <field name="prefix">WRO/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_eng_task" model="ir.sequence">
+            <field name="name">Engineering Task</field>
+            <field name="code">project.task.engineering</field>
+            <field name="prefix">ENG/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_qa_qc_task" model="ir.sequence">
+            <field name="name">QA/QC Task</field>
+            <field name="code">project.task.qa</field>
+            <field name="prefix">QLT/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_material_requisition" model="ir.sequence">
+            <field name="name">Material Requisition Sequence</field>
+            <field name="code">material.requisition.task</field>
+            <field name="prefix">MRQ/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_project_delivery" model="ir.sequence">
+            <field name="name">Project Delivery Sequence</field>
+            <field name="code">project.delivery</field>
+            <field name="prefix">DLY/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
+
+    </data>
+</odoo>

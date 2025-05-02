@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_form_sale_approve_configuration" model="ir.ui.view">
+        <field name="name">sale.approve.configuration.form.view</field>
+        <field name="model">sale.approve.configuration</field>
+        <field name="arch" type="xml">
+            <form string="Verification Item">
+                <header>
+                </header>
+                <sheet>
+                    <label for="name"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_approve_configuration_tree" model="ir.ui.view">
+        <field name="name">sale.approve.configuration.tree.view</field>
+        <field name="model">sale.approve.configuration</field>
+        <field name="arch" type="xml">
+            <tree string="Verification Item" create="1" delete="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- Action to open the list view of estimation model -->
+    <record id="action_sale_verification_item_config" model="ir.actions.act_window">
+        <field name="name">Sale Verification</field>
+        <field name="res_model">sale.approve.configuration</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_sale_approve_configuration_tree"/>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Verification sale
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="Sales Verification Items"
+            id="menu_sale_verification_items"
+            parent="sale.menu_sale_config"
+            action="action_sale_verification_item_config"
+            sequence="11"
+    />
+</odoo>

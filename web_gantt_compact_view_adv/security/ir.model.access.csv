@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_planning_link_user,access.project.planning.link.user,model_project_planning_link,base.group_user,1,1,1,1

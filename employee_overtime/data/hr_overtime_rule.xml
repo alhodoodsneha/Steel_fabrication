@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="hr_over_time_salary" model="hr.salary.rule">
+            <field name="name">Overtime</field>
+            <field name="code">OVT10</field>
+            <field name="sequence" eval="100"/>
+            <field name="category_id" ref="hr_payroll_community.ALW"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = inputs.OVT10</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = inputs.OVT10.amount</field>
+        </record>
+
+        <record id="hr_public_over_time_salary" model="hr.salary.rule">
+            <field name="name">Public Holiday Overtime</field>
+            <field name="code">POVT10</field>
+            <field name="sequence" eval="100"/>
+            <field name="category_id" ref="hr_payroll_community.ALW"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = inputs.POVT10</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = inputs.POVT10.amount</field>
+        </record>
+</odoo>

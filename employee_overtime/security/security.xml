@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="module_over_time_team_category">
+        <field name="name">Over Time</field>
+        <field name="sequence">95</field>
+    </record>
+
+    <!-- Over Time Users -->
+     <record model="ir.module.category" id="module_over_time_category">
+        <field name="parent_id" ref="module_over_time_team_category"/>
+        <field name="name">OverTime</field>
+        <field name="sequence">4</field>
+    </record>
+    <record model="res.groups" id="group_over_time_user">
+        <field name="name">Overtime User</field>
+        <field name="category_id" ref="employee_overtime.module_over_time_category"/>
+    </record>
+    <record model="res.groups" id="group_overtime_manager">
+        <field name="name">Overtime Manger</field>
+        <field name="category_id" ref="employee_overtime.module_over_time_category"/>
+        <field name="implied_ids" eval="[(4, ref('employee_overtime.group_over_time_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+</odoo>

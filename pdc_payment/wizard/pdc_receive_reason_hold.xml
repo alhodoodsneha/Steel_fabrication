@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pdc_reason_receive_hold_wizard" model="ir.ui.view">
+        <field name="name">pdc.reason.receive.hold.wizard.form.view</field>
+        <field name="model">pdc.reason.receive.hold.wizard</field>
+        <field name="arch" type="xml">
+            <form string="REASON">
+                <group>
+                    <field name="feedback" required="1"/>
+                    <field name="next_date" required="1"/>
+                </group>
+                <footer>
+                    <button name="action_add_feedback" type="object"
+                            string="Done" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pdc_reason_hold_receive_wizard" model="ir.actions.act_window">
+        <field name="name">Reason</field>
+        <field name="res_model">pdc.reason.receive.hold.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_pdc_reason_receive_hold_wizard"/>
+    </record>
+</odoo>

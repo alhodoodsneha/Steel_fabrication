@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_deferred_revenue_wizard,deferred.revenue.wizard,model_deferred_revenue_wizard,,1,1,1,1
+access_deferred_entry_revenue,deferred.entry.revenue,model_deferred_entry_revenue,,1,1,1,1
+access_deferred_entry_line,deferred.entry.line,model_deferred_entry_line,,1,1,1,1
+
+

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_partner_form_inherited_arm">
+        <field name="name">res.partner.form.view.inherited</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@id='individual']" position="before">
+                <h1>
+                    <field name="sequence_code" readonly="1"/>
+                </h1>
+            </xpath>
+            <xpath expr="//field[@name='industry_id']" position="after">
+                <field name="is_customer"/>
+                <field name="is_vendor"/>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="trade_license"/>
+                <field name="expiry_date"/>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="nolabel">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="before">
+                <label for="vat" string="TRN"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="action_customer_view" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="domain">[('is_customer', '=', True)]</field>
+        <field name="context">{'default_is_company': True,'default_customer_rank': 1,'search_default_customer':
+            1,'res_partner_search_mode': 'customer','default_is_customer':True}
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Customer view
+            </p>
+        </field>
+    </record>
+
+    <record id="action_vendor_view" model="ir.actions.act_window">
+        <field name="name">Vendors</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="domain">[('is_vendor', '=', True)]</field>
+        <field name="context">{'default_is_company': True,'search_default_supplier': 1,'res_partner_search_mode':
+            'supplier', 'default_supplier_rank': 1,'default_is_vendor':True}
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Partner view
+            </p>
+        </field>
+    </record>
+
+     <record id="action_other_view" model="ir.actions.act_window">
+        <field name="name">Others</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="domain"></field>
+        <field name="context">{'default_is_company': True,'create': False,'delete': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Other partners view
+            </p>
+        </field>
+    </record>
+    <record id="contacts.res_partner_menu_contacts" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <menuitem id="menu_customer_partner"
+              name="Customers"
+              action="action_customer_view"
+              parent="contacts.menu_contacts"
+              sequence="1"/>
+
+    <menuitem id="menu_vendor_partner"
+              name="Vendors"
+              action="action_vendor_view"
+              parent="contacts.menu_contacts"
+              sequence="1"/>
+
+      <menuitem id="menu_other_partner"
+              name="Contacts"
+              action="action_other_view"
+              parent="contacts.menu_contacts"
+              sequence="1"/>
+
+</odoo>

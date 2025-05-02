@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account.menu_finance_entries" model="ir.ui.menu">
+        <field name="groups_id" eval="[(3, ref('account_group_payable_receivable.group_account_receivable'))]"/>
+    </record>
+</odoo>

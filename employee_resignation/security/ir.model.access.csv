@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_resignation,employee.resignation,model_employee_resignation,,1,1,1,1
+access_employee_gratuity,employee.gratuity,model_employee_gratuity,,1,1,1,1
+access_rejection_resignation_wizard,rejection.resignation.wizard,model_rejection_resignation_wizard,,1,1,1,1

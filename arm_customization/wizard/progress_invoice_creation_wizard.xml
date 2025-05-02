@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="progress_invoice_creation_wizard_view" model="ir.ui.view">
+        <field name="name">progress.invoice.creation.form.view</field>
+        <field name="model">progress.invoice.creation</field>
+        <field name="arch" type="xml">
+            <form string="Progress Invoice Creation">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="invoice_percentage"/>
+
+                        </group>
+                        <group>
+                            <field name="sale_order" readonly="1"/>
+                            <field name="sale_order" invisible="1"/>
+                        </group>
+                    </group>
+                    <button name="action_apply_invoice" type="object"
+                            string="Apply Percentage" class="btn-primary"/>
+                    <notebook>
+                        <page string="Pending Invoice Lines" name="pending_invoice_line">
+                            <field name="wizard_line_ids" widget="one2many">
+                                <tree string="Invoice Pending Lines" editable="bottom">
+                                    <field name="wizard_id" column_invisible="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="qty" readonly="1"/>
+                                    <field name="unit_price" readonly="1"/>
+                                    <field name="type_sale" column_invisible="1"/>
+                                    <field name="balanced_percentage" readonly="1"/>
+                                    <field name="inv_percentage"/>
+                                    <field name="inv_total_amount" readonly="1" column_invisible="1"/>
+                                    <field name="total_amount_invoice" readonly="1" column_invisible="1"/>
+                                    <field name="total_qty_invoice" readonly="1"  column_invisible="1"/>
+                                    <field name="line_id" column_invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                <footer>
+                    <button name="action_done_creation" type="object"
+                            string="Create Invoice" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_invoice_progress" model="ir.actions.act_window">
+        <field name="name">Progress Invoice</field>
+        <field name="res_model">progress.invoice.creation</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="progress_invoice_creation_wizard_view"/>
+    </record>
+</odoo>

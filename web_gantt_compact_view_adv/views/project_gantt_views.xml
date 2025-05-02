@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_gantt_project_planning" model="ir.ui.view">
+        <field name="name">Gantt Project Planning</field>
+        <field name="model">project.planning</field>
+        <field name="arch" type="xml">
+            <ganttview
+                    date_start="start_date"
+                    date_stop="end_date"
+                    color="color"
+                    round_dnd_dates="false"
+                    default_group_by="project"
+                    default_scale="year"
+                    task_type="task_type"
+                    show_links="true"
+                    progress="progress"
+                    deadline="end_date"
+                    link_model="project.planning.link"
+                    priority='task_priority'
+                    readonly="1"
+                     edit="false"
+            />
+        </field>
+    </record>
+
+
+    <record id="view_form_project_planning_inherit" model="ir.ui.view">
+        <field name="name">project.planning.form.view.inherit</field>
+        <field name="model">project.planning</field>
+        <field name="inherit_id" ref="arm_customization.view_form_project_planning"/>
+        <field eval="0" name="priority"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="after">
+                <notebook>
+                    <page name="link_task" string="Link Task">
+                        <field name="task_link_ids" widget="one2many" context="{'show_attribute': False}">
+                            <tree string="Link Type" editable="bottom">
+                                <field name="target_id"/>
+                                <field name="link_type"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+                <field name="type" position="after">
+                    <field name="task_priority"/>
+                    <field name="task_type" invisible="1"/>
+                    <field name="progress"/>
+                    <field name="color" widget="color_picker"/>
+                </field>
+        </field>
+    </record>
+
+    <record id="arm_customization.action_project_planing" model="ir.actions.act_window">
+        <field name="view_mode">tree,form,ganttview,kanban,calendar</field>
+    </record>
+
+</odoo>

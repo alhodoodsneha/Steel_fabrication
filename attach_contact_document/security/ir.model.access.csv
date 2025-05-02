@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_partner_document_type,partner.document.type,model_partner_document_type,,1,1,1,1
+access_partner_document,partner.document,model_partner_document,,1,1,1,1
+

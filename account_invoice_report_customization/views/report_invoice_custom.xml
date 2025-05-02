@@ -1,0 +1,858 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="account.tax_groups_totals">
+        <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]" t-as="amount_by_group">
+            <t t-set="display_tax_base" t-value="tax_totals['display_tax_base']"/>
+            <tr style="border: 1px solid black">
+                <t t-if="tax_totals['display_tax_base']">
+                    <td style="border: 1px solid black;padding-left:10px;">
+                        <span t-esc="amount_by_group['tax_group_name']"/>
+                        <span t-if="not amount_by_group['hide_base_amount']" class="text-nowrap">on
+                            <t t-esc="amount_by_group['formatted_tax_group_base_amount']"/>
+                        </span>
+                    </td>
+                    <td style="border: 1px solid black;padding-left:10px;"></td>
+                    <td style="border: 1px solid black;padding-left:10px;"></td>
+                    <td style="border: 1px solid black;padding-left:10px;"></td>
+                    <td style="border: 1px solid black;padding-left:10px;"></td>
+                    <td class="text-end o_price_total" style="border: 1px solid black;text-align:right;">
+                        <span class="text-nowrap" t-out="amount_by_group['formatted_tax_group_amount']">1.05</span>
+                    </td>
+                </t>
+                <t t-else="">
+                    <td style="border: 1px solid black;padding-left:10px;">
+                        <span t-out="amount_by_group['tax_group_name']">Tax 15%</span>
+                        <span>on</span>
+                        <span class="text-nowrap" t-out="amount_by_group['formatted_tax_group_base_amount']">27.00
+                        </span>
+                    </td>
+                    <td style="border: 1px solid black;"></td>
+                    <td style="border: 1px solid black;"></td>
+                    <td style="border: 1px solid black;"></td>
+                    <td style="border: 1px solid black;"></td>
+                    <td class="text-end o_price_total" style="border: 1px solid black;text-align:right;">
+                        <span class="text-nowrap" t-out="amount_by_group['formatted_tax_group_amount']">4.05</span>
+                    </td>
+                </t>
+            </tr>
+        </t>
+    </template>
+    <template id="account.document_tax_totals_company_currency_template">
+        <t t-set="show_company_taxes"
+           t-value="o.company_id.currency_id != o.currency_id and o.amount_tax != 0 and o.move_type in ['out_invoice', 'out_refund']"/>
+        <div t-if="not show_company_taxes" class="oe_structure"></div>
+        <div class="mb-2 mt-3 border p-2 avoid-page-break-inside totals_taxes_company_currency"
+             t-else="">
+            <table class="table">
+                <p class="tax_computation_company_currency">
+                    Taxes
+                    <span t-field="o.company_currency_id"/>
+                </p>
+                <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                    <tr class="border-black o_subtotal">
+                        <td style="border: 1px solid black;padding-left:10px;">
+                            <strong t-out="subtotal['name']">Untaxed amount</strong>
+                        </td>
+                        <td style="border: 1px solid black;"></td>
+                        <td style="border: 1px solid black;"></td>
+                        <td style="border: 1px solid black;"></td>
+                        <td style="border: 1px solid black;"></td>
+                        <td style="border: 1px solid black;text-align:right;">
+                            <span
+                                    t-out="subtotal['amount_company_currency']"
+                                    t-options='{"widget": "monetary", "display_currency": o.company_currency_id}'
+                            >27.00
+                            </span>
+                        </td>
+                    </tr>
+                    <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                    <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]" t-as="amount_by_group">
+                        <tr>
+                            <t t-if="tax_totals['display_tax_base']">
+                                <td style="border: 1px solid black;padding-left:10px;">
+                                    <span t-out="amount_by_group['tax_group_name']">Tax 15%</span>
+                                    <span>on</span>
+                                    <span class="text-nowrap"
+                                          t-out="amount_by_group['tax_group_base_amount_company_currency']"
+                                          t-options='{"widget": "monetary", "display_currency": o.company_currency_id}'>
+                                        27.00
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td class="text-end o_price_total" style="border: 1px solid black;text-align:right;">
+                                    <span class="text-nowrap"
+                                          t-out="amount_by_group['tax_group_amount_company_currency']"
+                                          t-options='{"widget": "monetary", "display_currency": o.company_currency_id}'
+                                    >4.05
+                                    </span>
+                                </td>
+                            </t>
+                            <t t-else="">
+                                <td style="border: 1px solid black;padding-left:10px;">
+                                    <span class="text-nowrap" t-out="amount_by_group['tax_group_name']"/>
+                                </td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td class="text-end o_price_total" style="border: 1px solid black;text-align:right;">
+                                    <span class="text-nowrap"
+                                          t-out="amount_by_group['tax_group_amount_company_currency']"
+                                          t-options='{"widget": "monetary", "display_currency": o.company_currency_id}'
+                                    >31.05
+                                    </span>
+                                </td>
+                            </t>
+                        </tr>
+                    </t>
+                </t>
+                <!--Total amount with all taxes-->
+                <tr class="border-black o_total" style="border: 1px solid black;">
+                    <td style="border: 1px solid black;padding-left:10px;">
+                        <strong>Total</strong>
+                    </td>
+                    <td style="border: 1px solid black;"></td>
+                    <td style="border: 1px solid black;"></td>
+                    <td style="border: 1px solid black;"></td>
+                    <td style="border: 1px solid black;"></td>
+                    <td style="border: 1px solid black;text-align:right;">
+                        <span t-out="abs(o.amount_total_signed)"
+                              t-options='{"widget": "monetary", "display_currency": o.company_currency_id}'>
+                            31.05
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </template>
+    <template id="account.document_tax_totals_template">
+        <t t-foreach="tax_totals.get('subtotals')" t-as="subtotal">
+            <tr class="border-black o_subtotal">
+                <td style="border: 1px solid black;padding-left:10px;">
+                    <strong t-out="subtotal['name']">Untaxed Amount</strong>
+                </td>
+                <td style="border: 1px solid black;"></td>
+                <td style="border: 1px solid black;"></td>
+                <td style="border: 1px solid black;"></td>
+                <td style="border: 1px solid black;"></td>
+                <td style="border: 1px solid black;text-align:right;">
+                    <span
+
+                            t-out="subtotal['formatted_amount']"
+                    >27.00
+                    </span>
+                </td>
+            </tr>
+
+            <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+            <t t-call="account.tax_groups_totals"/>
+        </t>
+
+        <tr t-if="'formatted_rounding_amount' in tax_totals and tax_totals.get('rounding_amount') != 0">
+            <td style="border: 1px solid black;padding-left:10px;">Rounding</td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;text-align:right;">
+                <span t-out="tax_totals.get('formatted_rounding_amount')">0</span>
+            </td>
+        </tr>
+
+        <!--Total amount with all taxes-->
+        <tr class="border-black o_total">
+            <td style="border: 1px solid black;padding-left:10px;">
+                <strong>Total</strong>
+            </td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;text-align:right;">
+                <span t-out="tax_totals.get('formatted_amount_total')">31.05</span>
+            </td>
+        </tr>
+    </template>
+
+
+    <template id="custom_header_footer"
+              inherit_id="account.report_invoice_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <t t-call="web.basic_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="forced_vat" t-value="o.fiscal_position_id.foreign_vat"/>
+                <div t-attf-class="header" t-att-style="report_header_style">
+                    <div class="row">
+                        <div class="col-12" style="text-align: left;">
+                            <div class="o.company_id-logo" style="text-align: left;">
+                                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                     style="max-height: 99px;align-content:left !important;width:100%;" alt="Logo"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid lightgray; margin-bottom: 10px;"></div>
+                </div>
+                <div class="mt-20 clearfix">
+                    <div class="page mb-4">
+                        <div class="oe_structure"></div>
+                        <table style="width: 100%;border: 1px solid black;">
+                            <thead>
+                                <tr>
+                                    <td colspan="6"
+                                        style="border: 1px solid black; text-align: center; vertical-align: middle; font-weight: bold;background-color:#ddf5f9;">
+                                        <h6 style="text-align: center;">
+                                            <strong>
+                                                <span t-if="o.company_id.country_id.code == 'AE' and o.move_type in ['out_invoice', 'out_refund']">
+                                                    TAX
+                                                </span>
+                                                <span t-if="not proforma"></span>
+                                                <span t-else="">PROFORMA</span>
+                                                <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">
+                                                    INVOICE
+                                                </span>
+                                                <span t-elif="o.move_type == 'out_invoice' and o.state == 'draft'">DRAFT
+                                                    INVOICE
+                                                </span>
+                                                <span t-elif="o.move_type == 'out_invoice' and o.state == 'cancel'">
+                                                    CANCELLED INVOICE
+                                                </span>
+                                                <span t-elif="o.move_type == 'out_refund' and o.state == 'posted'">
+                                                    CREDIT
+                                                    NOTE
+                                                </span>
+                                                <span t-elif="o.move_type == 'out_refund' and o.state == 'draft'">DRAFT
+                                                    CREDIT NOTE
+                                                </span>
+                                                <span t-elif="o.move_type == 'out_refund' and o.state == 'cancel'">
+                                                    CANCELLED
+                                                    CREDIT NOTE
+                                                </span>
+                                                <span t-elif="o.move_type == 'in_refund'">VENDOR CREDIT NOTE</span>
+                                                <span t-elif="o.move_type == 'in_invoice'">VENDOR BILL</span>
+                                                <span t-if="o.name != '/'" t-field="o.name" style="padding-left:5px;">
+                                                    INV/2023/0001
+                                                </span>
+                                            </strong>
+                                        </h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5"
+                                        style="border-top: 1px solid black;border-bottom: 1px solid black;border-left: 1px solid black;border-right: 0px !important; text-align: center; font-weight: bold;vertical-align: middle;">
+                                        TRN: 104204025100003
+                                    </td>
+                                    <td colspan="1"
+                                        style="border-top: 1px solid black;border-bottom: 1px solid black;border-right: 1px solid black;border-left: 0px !important; text-align: right; padding-right: 2px; font-weight: bold;vertical-align: middle;">
+                                        <span t-field="o.invoice_date" t-options='{"format": "dd MMM yyyy"}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6"
+                                        style="border: 1px solid black; text-align: center; font-weight: bold;vertical-align: middle;background-color:#ddf5f9;">
+                                        <strong>
+                                            <span>CUSTOMER &amp; PROJECT DETAILS</span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;width:15%;font-size:13px;padding-left:2px;">
+                                        <strong>Company Name</strong>
+                                    </td>
+                                    <td colspan="2" style="border: 1px solid black;font-size:13px;">
+                                        <span t-field="o.partner_id.name"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;">
+                                        <strong>INVOICE NO</strong>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;">
+                                        <span t-field="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;width:15%;font-size:13px;padding-left:2px;">
+                                        <strong>Address</strong>
+                                    </td>
+                                    <td colspan="2" style="border: 1px solid black;font-size:13px;">
+                                        <span t-if="o.partner_id.street"><t t-esc="o.partner_id.street"/>,
+                                        </span>
+                                        <span t-if="o.partner_id.street2"><t t-esc="o.partner_id.street2"/>,
+                                        </span>
+                                        <span t-if="o.partner_id.city"><t t-esc="o.partner_id.city"/>,
+                                        </span>
+                                        <span t-if="o.partner_id.state_id"><t t-esc="o.partner_id.state_id.name"/>,
+                                        </span>
+                                        <span t-if="o.partner_id.country_id"><t t-esc="o.partner_id.country_id.name"/>,
+                                        </span>
+                                        <span t-if="o.partner_id.zip"><t t-esc="o.partner_id.zip"/>,
+                                        </span>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;">
+                                        <strong>Job No</strong>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;">
+                                        <span t-field="o.job_no"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;width:15%;font-size:13px;padding-left:2px;">
+                                        <strong>Phone</strong>
+                                    </td>
+                                    <td colspan="2" style="border: 1px solid black;font-size:13px;">
+                                        <span t-field="o.partner_id.phone"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;">
+                                        <strong>Sales Engineer</strong>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;">
+                                        <span t-field="o.invoice_user_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;width:15%;font-size:13px;padding-left:2px;">
+                                        <strong>Email</strong>
+                                    </td>
+                                    <td colspan="2" style="border: 1px solid black;font-size:13px;">
+                                        <span t-field="o.partner_id.email"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;">
+                                        <strong>Project Status</strong>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;">
+                                        <span t-field="o.job_status"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;width:15%;font-size:13px;padding-left:2px;">
+                                        <strong>Customer TRN</strong>
+                                    </td>
+                                    <td colspan="2" style="border: 1px solid black;font-size:13px;">
+                                        <span t-field="o.partner_id.vat"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;">
+                                        <strong>Project Location</strong>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;">
+                                        <span t-field="o.job_location"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;width:15%;font-size:13px;padding-left:2px;">
+                                        <strong>LPO NO</strong>
+                                    </td>
+                                    <td colspan="2" style="border: 1px solid black;font-size:13px;">
+                                        <span t-field="o.lpo_no"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;">
+                                        <strong>Cont Ref</strong>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;">
+                                        <span t-field="o.cont_ref"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;width:15%;font-size:13px;padding-left:2px;">
+                                        <strong>Payment Terms</strong>
+                                    </td>
+                                    <td colspan="2" style="border: 1px solid black;font-size:13px;">
+                                        <span t-field="o.invoice_payment_term_id.name"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;">
+                                        <strong>PO Value</strong>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;">
+                                        <span t-field="o.po_value"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;width:15%;font-size:13px;padding-left:2px;">
+                                        <strong>Work Done Period</strong>
+                                    </td>
+                                    <td colspan="2" style="border: 1px solid black;font-size:13px;">
+                                        <span t-field="o.wrk_dn_period"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;">
+                                        <strong>PI PREPARED BY</strong>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;">
+                                        <span t-field="o.pi_prepared_by"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;width:15%;font-size:13px;padding-left:2px;">
+                                        <strong>Project</strong>
+                                    </td>
+                                    <td colspan="2" style="border: 1px solid black;font-size:13px;">
+                                        <span t-field="o.project_job"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;">
+                                        <strong>Division</strong>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;">
+                                        <span t-field="o.division_job"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6"
+                                        style="border: 1px solid black; text-align: center; font-weight: bold;vertical-align: middle;background-color:#ddf5f9;">
+                                        <strong>
+                                            <span>WORK DONE DETAILS</span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <t t-set="current_subtotal" t-value="0"/>
+                            <t t-set="current_total" t-value="0"/>
+                            <t t-set="lines"
+                               t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+                            <tbody>
+                                <tr style="border: 1px solid black;">
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:12%;">
+                                        <strong>SL.No</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:40%;">
+                                        <strong>Description</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:10%;">
+                                        <strong>%</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:13%;">
+                                        <strong>UOM</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:10%;">
+                                        <strong>Rate(AED)</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:15%;">
+                                        <strong>Total Amount(AED)</strong>
+                                    </td>
+                                </tr>
+                                <t t-set="sl_no" t-value="1"/>
+                                <t t-foreach="lines" t-as="line">
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                                    <t t-set="current_total" t-value="current_total + line.price_total"/>
+                                    <tr style="border: 1px solid black">
+                                        <td style="border: 1px solid black;padding-left:10px;text-align:center;vertical-align: middle;width:12%;">
+                                            <span t-esc="sl_no"/>
+                                            <t t-set="sl_no" t-value="sl_no + 1"/>
+                                        </td>
+                                        <td style="border: 1px solid black;padding-left:10px;text-align:center;vertical-align: middle;width:12%;">
+                                            <span t-if="line.name" t-field="line.name"
+                                                  t-options="{'widget': 'text'}">
+                                            </span>
+                                        </td>
+                                        <td style="border: 1px solid black;padding-left:10px;text-align:center;vertical-align: middle;width:12%;">
+                                            <span t-field="line.invoice_per"></span>%
+                                        </td>
+                                        <td style="border: 1px solid black;padding-left:10px;text-align:center;vertical-align: middle;width:12%;">
+                                            <span t-field="line.product_uom_id" groups="uom.group_uom"></span>
+                                        </td>
+                                        <td name="td_price_unit"
+                                            style="border: 1px solid black;text-align:center;vertical-align: middle;width:12%;">
+                                            <span class="text-nowrap" t-field="line.price_unit"></span>
+                                        </td>
+                                        <td name="td_subtotal"
+                                            style="border: 1px solid black;text-align:center;vertical-align: middle;width:12%;"
+                                            class="o_price_total">
+                                            <span class="text-nowrap" t-field="line.price_subtotal"></span>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-set="tax_totals" t-value="o.tax_totals or {}"/>
+                                <tr style="border: 1px solid black;">
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:12%;">
+                                        Total Amount (AED)
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:40%;">
+
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:10%;">
+
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:13%;">
+
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:10%;">
+
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;width:15%;">
+                                        <t t-set="tax_totals" t-value="o.tax_totals or {}"/>
+
+                                        <t t-foreach="tax_totals.get('subtotals')" t-as="subtotal">
+                                            <span t-out="subtotal['formatted_amount']"
+                                            >27.00
+                                            </span>
+                                        </t>
+                                        <t t-if="not tax_totals.get('subtotals')">
+                                            <span t-out="tax_totals.get('formatted_amount_total')">31.05</span>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black;">
+                                    <td colspan="4"
+                                        style="border: 1px solid black;text-align:left;vertical-align: middle;background-color:#afeab5;color:#7b7998;">
+                                        <strong>WORK CERTIFIED</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;background-color:#afeab5;color:#7b7998;">
+                                        <strong>Previous</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;background-color:#afeab5;color:#7b7998;">
+                                        <strong>This Month</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"
+                                        style="border-top: 1px solid black;border-bottom: 0px !important;border-left: 1px solid black;border-right: 1px solid black;text-align:left;vertical-align: middle;font-size:12px;">
+                                        <strong>Gross Work Certified</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <span t-field="o.gross_wrk_credit_previous"/>
+                                        </strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <t t-set="tax_totals" t-value="o.tax_totals or {}"/>
+
+                                            <t t-foreach="tax_totals.get('subtotals')" t-as="subtotal">
+                                                <span t-out="subtotal['formatted_amount']"
+                                                >27.00
+                                                </span>
+                                            </t>
+                                            <t t-if="not tax_totals.get('subtotals')">
+                                                <span t-out="tax_totals.get('formatted_amount_total')">31.05</span>
+                                            </t>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"
+                                        style="border-top: 0px !important;border-bottom: 0px !important;border-left: 1px solid black;border-right: 1px solid black;text-align:left;vertical-align: middle;font-size:12px;color:#e94646;">
+                                        <strong>Less Advance Recovery</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <span t-field="o.less_advance_previous"/>
+                                        </strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <span t-field="o.less_advance_this_month"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"
+                                        style="border-top: 0px !important;border-bottom: 0px !important;border-left: 1px solid black;border-right: 1px solid black;text-align:left;vertical-align: middle;font-size:12px;color:#e94646;">
+                                        <strong>Less Retention 10%</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <span t-field="o.less_retention_previous"/>
+                                        </strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <span t-field="o.less_retention_this_month"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"
+                                        style="border-top: 0px !important;border-bottom:0px !important;border-left: 1px solid black;border-right: 1px solid black;text-align:left;vertical-align: middle;font-size:12px;">
+                                        <strong>Sub Total</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <span t-field="o.subtotal_previous"/>
+                                        </strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <t t-set="tax_totals" t-value="o.tax_totals or {}"/>
+
+                                            <t t-foreach="tax_totals.get('subtotals')" t-as="subtotal">
+                                                <span t-out="subtotal['formatted_amount']"
+                                                >27.00
+                                                </span>
+                                            </t>
+                                            <t t-if="not tax_totals.get('subtotals')">
+                                                <span t-out="tax_totals.get('formatted_amount_total')">31.05</span>
+                                            </t>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"
+                                        style="border-top: 0px !important;border-bottom: 0px !important;border-left: 1px solid black;border-right: 1px solid black;text-align:left;vertical-align: middle;font-size:12px;">
+                                        <strong>Vat @5%</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <span t-field="o.vat_previous"/>
+                                        </strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <t t-foreach="tax_totals.get('subtotals')" t-as="subtotal">
+                                                <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                                                <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]"
+                                                   t-as="amount_by_group">
+                                                    <t t-set="display_tax_base"
+                                                       t-value="tax_totals['display_tax_base']"/>
+                                                    <t t-if="tax_totals['display_tax_base']">
+                                                        <span class="text-nowrap"
+                                                              t-out="amount_by_group['formatted_tax_group_amount']">1.05
+                                                        </span>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="text-nowrap"
+                                                              t-out="amount_by_group['formatted_tax_group_amount']"></span>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"
+                                        style="border-top: 0px !important;border-bottom: 0px !important;border-left: 1px solid black;border-right: 1px solid black;text-align:left;vertical-align: middle;font-size:12px;">
+                                        <strong>Net Amount Due for Payment</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <span t-field="o.net_amount_due_date_previous"/>
+                                        </strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;font-size:12px;">
+                                        <strong>
+                                            <span t-out="tax_totals.get('formatted_amount_total')">31.05</span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black;">
+                                    <td colspan="3"
+                                        style="border: 1px solid black;text-align:left;vertical-align: middle;background-color:#afeab5;">
+                                        <strong>Total Payable Against this Tax Invoice</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;background-color:#afeab5;">
+                                        <strong></strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;background-color:#afeab5;">
+                                        <strong>AED</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:center;vertical-align: middle;background-color:#afeab5;">
+                                        <strong>
+                                            <span t-out="tax_totals.get('formatted_amount_total')">31.05</span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"
+                                        style="border-top: 1px solid black;border-bottom: 1px solid black;border-left: 1px solid black;border-right: 1px solid black; text-align: center; font-weight: bold;vertical-align: middle;background-color:#f0e3d4;">
+                                        Bank Details
+                                    </td>
+                                    <td colspan="3"
+                                        style="border-top: 1px solid black;border-bottom: 1px solid black;border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-weight: bold;vertical-align: middle;background-color:#f0e3d4;">
+                                        Prepared By
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;font-size:13px;padding-left:2px;background-color:#f0e3d4;">
+                                        <strong>Name Of Beneficiary</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;font-size:13px;background-color:#f0e3d4;">
+                                         <span t-field="o.company_id.beneficiary_name"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;background-color:#f0e3d4;">
+                                        <strong>Name</strong>
+                                    </td>
+                                    <td colspan="3"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;background-color:#f0e3d4;">
+                                         <span t-field="o.prepared_by.name"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;font-size:13px;padding-left:2px;background-color:#f0e3d4;">
+                                        <strong>Bank Name</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;font-size:13px;background-color:#f0e3d4;">
+                                        <span t-field="o.company_id.bank"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;background-color:#f0e3d4;">
+                                        <strong>Designation</strong>
+                                    </td>
+                                    <td colspan="3"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;background-color:#f0e3d4;">
+                                        <span t-field="o.Designation"/>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;font-size:13px;padding-left:2px;background-color:#f0e3d4;">
+                                        <strong>Account No</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;font-size:13px;background-color:#f0e3d4;">
+                                         <span t-field="o.company_id.acc_no"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;background-color:#f0e3d4;">
+                                        <strong>Signature</strong>
+                                    </td>
+                                    <td colspan="3"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;background-color:#f0e3d4;">
+
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;font-size:13px;padding-left:2px;background-color:#f0e3d4;">
+                                        <strong>IBAN No</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;font-size:13px;background-color:#f0e3d4;">
+                                          <span t-field="o.company_id.iban"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;background-color:#f0e3d4;">
+                                        <strong>Stamp</strong>
+                                    </td>
+                                    <td colspan="3"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;background-color:#f0e3d4;">
+
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;font-size:13px;padding-left:2px;background-color:#f0e3d4;">
+                                        <strong>Swift Code</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;font-size:13px;background-color:#f0e3d4;">
+                                        <span t-field="o.company_id.swift"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;background-color:#f0e3d4;">
+                                        <strong></strong>
+                                    </td>
+                                    <td colspan="3"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;background-color:#f0e3d4;">
+
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;font-size:13px;padding-left:2px;background-color:#f0e3d4;">
+                                        <strong>Branch</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;font-size:13px;background-color:#f0e3d4;">
+                                        <span t-field="o.company_id.branch_bank"/>
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;background-color:#f0e3d4;">
+                                        <strong></strong>
+                                    </td>
+                                    <td colspan="3"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;background-color:#f0e3d4;">
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6"
+                                        style="border: 1px solid black; text-align: center; font-weight: bold;vertical-align: middle;background-color:#ddf5f9;">
+                                        <strong>
+                                            <span>Received By</span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;font-size:13px;padding-left:2px;height:50px;">
+                                        <strong>Name</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;font-size:13px;height:50px;">
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;height:50px;">
+                                        <strong>Signature</strong>
+                                    </td>
+                                    <td colspan="3"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;height:50px;">
+
+                                    </td>
+                                </tr>
+                                <tr style="border: 1px solid black">
+                                    <td style="border: 1px solid black;text-align:left;vertical-align: middle;font-size:13px;padding-left:2px;height:50px;">
+                                        <strong>Designation</strong>
+                                    </td>
+                                    <td style="border: 1px solid black;font-size:13px;height:50px;">
+                                    </td>
+                                    <td style="border: 1px solid black;text-align:left;padding-left:2px;vertical-align: middle;font-size:13px;height:50px;">
+                                        <strong>Stamp</strong>
+                                    </td>
+                                    <td colspan="3"
+                                        style="border: 1px solid black;text-align:left;padding-left:2px;font-size:13px;height:50px;">
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div t-attf-class="footer o_standard_footer">
+                    <div class="text-center">
+                        <div style="border-top: 2px solid #e94646; margin-bottom: 10px;"></div>
+                        <ul class="list-inline"
+                            style="display: flex; padding: 0; list-style-type: none; justify-content: center;">
+
+                            <i class="fa fa-mobile" style="color:#e94646;"> &amp;nbsp; <span t-esc="o.company_id.phone" style="margin-right: 2px;"/></i>&amp;nbsp;
+                            <i class="fa-map-marker" style="color:#e94646;">&amp;nbsp;
+                                <span>P.O.Box:60511,Sharjah,United Arab Emirates</span>
+                            </i>&amp;nbsp;
+                             <i class="fa-envelope" style="color:#e94646;">&amp;nbsp;
+                               <span>info@armmetal.ae</span>
+                             </i>
+                        </ul>
+                        <div t-if="report_type == 'pdf'" class="text-muted">
+                            Page:
+                            <span class="page"/>
+                            of
+                            <span class="topage"/>
+                        </div>
+                        <div t-if="report_type == 'pdf' and display_name_in_footer" class="text-muted">
+                            <span t-field="o.name"/>
+                        </div>
+                    </div>
+
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <record id="invoice_paper_format" model="report.paperformat">
+        <field name="name">Invoice Customization</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">35</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="account.account_invoices" model="ir.actions.report">
+        <field name="name">Invoices</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">account.report_invoice_with_payments</field>
+        <field name="report_file">account.report_invoice_with_payments</field>
+        <field name="print_report_name">(object._get_report_base_filename())</field>
+        <field name="attachment"/>
+        <field name="paperformat_id" ref="invoice_paper_format"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="groups_id" eval="[(4, ref('account.group_account_invoice')),
+ (4, ref('account.group_account_readonly'))]"/>
+    </record>
+</odoo>

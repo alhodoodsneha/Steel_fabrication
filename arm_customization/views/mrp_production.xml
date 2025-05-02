@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_production_inherited_arm" model="ir.ui.view">
+        <field name="name">mrp.production.view.form.inherit.arm</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_id']" position="after">
+                <field name="work_order_id" readonly="1"/>
+                <field name="assemble_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm']" position="after">
+                <button name="action_material_request" type="object" string="Material Request" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//button[@name='action_view_reception_report']" position="after">
+                <button name="action_open_related_mrq" type="object"
+                        string="Material Request" icon="fa-pencil-square-o"
+                        class="btn-primary"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

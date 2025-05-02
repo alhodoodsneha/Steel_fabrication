@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_submitted_shop_drawing" model="ir.ui.view">
+        <field name="name">shop.drawing.submitted.wizard.form</field>
+        <field name="model">shop.drawing.submitted.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Shop Drawing Submitted">
+                <group>
+                    <group>
+                        <field name="submitted_date"/>
+                    </group>
+                    <group>
+
+                    </group>
+                </group>
+                <footer>
+                    <button type="object" name="action_submitted" string="Submit" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_submitted_drawing" model="ir.actions.act_window">
+        <field name="name">Submitted Wizard</field>
+        <field name="res_model">shop.drawing.submitted.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_submitted_shop_drawing"/>
+    </record>
+
+
+    <record id="view_shop_drawing_wizard_form" model="ir.ui.view">
+        <field name="name">shop.drawing.wizard.wizard.form</field>
+        <field name="model">shop.drawing.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Shop Drawing Wizard">
+                <group>
+                    <group>
+                        <field name="submitted_date"/>
+                    </group>
+                    <group>
+                        <field name="command_date"/>
+                    </group>
+                    <field name="comment"/>
+                </group>
+                <footer>
+                    <button type="object" name="action_submitted" string="Submit" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_shop_drawing_wizard" model="ir.actions.act_window">
+        <field name="name">Shop Drawing Wizard</field>
+        <field name="res_model">shop.drawing.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_shop_drawing_wizard_form"/>
+    </record>
+
+     <record id="view_qa_qc_wizard_form" model="ir.ui.view">
+        <field name="name">qa.qc.status.wizard.form</field>
+        <field name="model">qa.qc.status.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Fail Wizard">
+                <group>
+                    <group>
+                        <field name="submitted_date"/>
+                    </group>
+                    <group>
+                        <field name="fail_type"/>
+                        <field name="user_id" readonly="1"/>
+                    </group>
+                    <field name="reason"/>
+                </group>
+                <footer>
+                    <button type="object" name="action_submitted" string="Submit" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_qa_qc_wizard" model="ir.actions.act_window">
+        <field name="name">Fail Wizard</field>
+        <field name="res_model">qa.qc.status.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_qa_qc_wizard_form"/>
+    </record>
+</odoo>

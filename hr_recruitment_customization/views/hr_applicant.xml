@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_applicant_view_form_inherited_for_arm" model="ir.ui.view">
+        <field name="name">hr.applicant.view.form.inherit.for.arm</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type_id']" position="after">
+                <field name="emp_country_id"/>
+                <field name="emp_state_id"/>
+            </xpath>
+            <xpath expr="//group[@name='recruitment_contract']/div[2]" position="after">
+                <field name="other_allowance_emp"/>
+                <field name="sequence" invisible="1"/>
+            </xpath>
+<!--            <xpath expr="//div[@name='button_box']/" position="inside">-->
+<!--                <field name="other_allowance_emp"/>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+</odoo>

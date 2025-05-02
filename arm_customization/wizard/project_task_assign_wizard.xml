@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_assign_wizard_form_view" model="ir.ui.view">
+        <field name="name">project.assign.wizard.form.view</field>
+        <field name="model">project.assign.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Assign To">
+                <group>
+                    <field name="assign_to" required="1" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_assign_to" type="object"
+                            string="Assign" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_project_assign_wizard_wizard" model="ir.actions.act_window">
+        <field name="name">Assign To</field>
+        <field name="res_model">project.assign.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="project_assign_wizard_form_view"/>
+    </record>
+</odoo>

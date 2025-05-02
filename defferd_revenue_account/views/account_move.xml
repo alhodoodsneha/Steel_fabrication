@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="view_account_move_form_inherited" model="ir.ui.view">
+            <field name="name">account.move.view.inherited</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_post']" position="after">
+                   <button name="action_create_deferral" string="Create Deferral" class="oe_highlight"
+                                type="object" invisible="is_create_deferral == True or move_type != 'entry' or state != 'posted'"/>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="after">
+                      <field name="is_create_deferral" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

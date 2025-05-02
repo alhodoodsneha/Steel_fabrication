@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_task_form_inherited_arm" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.arm</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+              <xpath expr="//group/group/field[@name='project_id']" position="attributes">
+                 <attribute name="invisible">1</attribute>
+             </xpath>
+              <xpath expr="//group/group/field[@name='project_id']" position="attributes">
+                 <attribute name="invisible">_is_work_task == False</attribute>
+             </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="_is_estimation_task" invisible="1"/>
+                <field name="_is_work_task" invisible="1"/>
+                <field name="is_eng_task" invisible="1"/>
+                <field name="is_eng_task" invisible="1"/>
+                <field name="shop_drawing_approve" invisible="1"/>
+                <field name="shop_drawing_reject" invisible="1"/>
+                <field name="settlement_status" invisible="1"/>
+                <field name="stage_type" invisible="1"/>
+                <field name="is_qa_qc_task" invisible="1"/>
+                <field name="shop_drawing_type" invisible="_is_work_task == False or stage_type != 'shop_drawing'"
+                       readonly="1" widget="badge"/>
+                <field name="design_type" invisible="_is_work_task == False or stage_type != 'design'" readonly="1"
+                       widget="badge"/>
+                <field name="material_sub_type" invisible="_is_work_task == False or stage_type != 'material'"
+                       readonly="1" widget="badge"/>
+                <field name="sample_sub_type" invisible="_is_work_task == False or stage_type != 'sample'"
+                       readonly="1" widget="badge"/>
+
+                <field name="wr_project" invisible="is_eng_task == False"/>
+                <field name="wr_qa_project" invisible="is_qa_qc_task == False"/>
+                <field name="wr_progress" invisible="_is_work_task == False" widget="project_task_progressbar"/>
+                <field name="site_measurement"
+                       invisible="_is_work_task == False or stage_type in ['shop_drawing','design','material','sample']"/>
+                <field name="mrp_id"
+                       invisible="_is_work_task == False or stage_wk not in ['production','qa_qc','delivered','invoiced']"
+                       readonly="1"/>
+                <field name="date_created" invisible="is_eng_task == False"/>
+                   <field name="job_wrk_name" invisible="_is_work_task == False" readonly="1"/>
+                <field name="is_completed" invisible="1"/>
+                <field name="w_product" invisible="1"/>
+                <field name="w_boq" invisible="1"/>
+                <field name="p_qty" invisible="1"/>
+                <field name="p_uom" invisible="1"/>
+                <field name="assigned_to_done" invisible="1"/>
+                <field name="_revision_task" invisible="1"/>
+                <field name="revision_count" invisible="1"/>
+                <field name="revision_shop_drawing_count" invisible="1"/>
+                <field name="revision_design_count" invisible="1"/>
+                <field name="revision_material_sub_count" invisible="1"/>
+                <field name="revision_sample_sub_count" invisible="1"/>
+                <field name="estimation_parent_id" invisible="1"/>
+                <field name="parent_task" invisible="1"/>
+                <field name="start_date" invisible="1"/>
+                <field name="end_date" invisible="1"/>
+                <field name="crm_lead_id"/>
+                <field name="mir_status" readonly="1" widget="badge" decoration-success="mir_status == 'mir_approve'"
+                       decoration-warning="mir_status == 'mir_reject'"
+                       invisible="stage_type in ['shop_drawing','design','material','sample','material_request','fabrication','production','delivered'] or _is_estimation_task ==True"/>
+                <field name="eraction_status" readonly="0"
+                       decoration-success="eraction_status in[ 'drawing','completed']"
+                       decoration-warning="eraction_status == 'installation'"
+                       invisible="stage_type in ['shop_drawing','design','material','sample','material_request','fabrication','production','delivered','mir_approved']  or _is_estimation_task ==True"/>
+                <field name="qa_qc_status" readonly="1" widget="badge" decoration-success="qa_qc_status == 'pass'"
+                       decoration-warning="qa_qc_status == 'fail'"
+                       invisible="stage_type in ['shop_drawing','design','material','sample','material_request','fabrication','production','delivered','mir_approved','eraction']  or _is_estimation_task ==True"/>
+                <field name="wir_status" readonly="1" widget="badge" decoration-success="wir_status == 'pass'"
+                       decoration-warning="wir_status == 'fail'"
+                       invisible="stage_type in ['shop_drawing','design','material','sample','material_request','fabrication','production','delivered','mir_approved','eraction','qa_qc']  or _is_estimation_task ==True"/>
+                <field name="revision_name" readonly="1"
+                       invisible="_is_estimation_task == False and _revision_task == False"/>
+                <field name="estimation_status" readonly="1" widget="badge"
+                       invisible="_is_estimation_task == False and _revision_task == False"/>
+                <field name="total_estimation" invisible="_is_estimation_task == False and _revision_task == False"/>
+                <field name="start_date" string="Planned Date" widget="daterange" invisible="1"
+                       options='{"end_date_field": "end_date", "always_range": "1"}' required="start_date or end_date"/>
+                <field name="end_date" invisible="1" required="start_date"/>
+            </xpath>
+            <xpath expr="//widget[@name='web_ribbon']" position="after">
+                <widget name="web_ribbon" title="Under Estimation" bg_color="text-bg-info"
+                        invisible="estimation_status != 'under_estimation'or _is_estimation_task == False and _revision_task == False"/>
+                <widget name="web_ribbon" title="Approve Estimation" bg_color="text-bg-success"
+                        invisible="estimation_status != 'approve' or _is_estimation_task == False and _revision_task == False"/>
+                <widget name="web_ribbon" title="Refuse Estimation" bg_color="text-bg-warning"
+                        invisible="estimation_status != 'refuse_estimation' or _is_estimation_task == False and _revision_task == False"/>
+                <widget name="web_ribbon" title="Cancel" bg_color="text-bg-danger"
+                        invisible="estimation_status != 'cancel' or _is_estimation_task == False and _revision_task == False"/>
+                <widget name="web_ribbon" title="Approved" bg_color="text-bg-success"
+                        invisible="shop_drawing_type != 'approved' or _is_work_task == False or  stage_type != 'shop_drawing'"/>
+                <widget name="web_ribbon" title="Pending" bg_color="text-bg-warning"
+                        invisible="shop_drawing_type != 'pending' or _is_work_task == False or  stage_type != 'shop_drawing'"/>
+                <widget name="web_ribbon" title="Revision" bg_color="text-bg-warning"
+                        invisible="shop_drawing_type != 'revision' or _is_work_task == False or  stage_type != 'shop_drawing'"/>
+                <widget name="web_ribbon" title="Submitted" bg_color="text-bg-info"
+                        invisible="shop_drawing_type != 'submitted' or _is_work_task == False or  stage_type != 'shop_drawing'"/>
+                <widget name="web_ribbon" title="Approved" bg_color="text-bg-success"
+                        invisible="design_type != 'approved' or _is_work_task == False or  stage_type != 'design'"/>
+                <widget name="web_ribbon" title="Pending" bg_color="text-bg-warning"
+                        invisible="design_type != 'pending' or _is_work_task == False or  stage_type != 'design'"/>
+                <widget name="web_ribbon" title="Revision" bg_color="text-bg-warning"
+                        invisible="design_type != 'revision' or _is_work_task == False or  stage_type != 'design'"/>
+                <widget name="web_ribbon" title="Submitted" bg_color="text-bg-info"
+                        invisible="design_type != 'submitted' or _is_work_task == False or  stage_type != 'design'"/>
+                <widget name="web_ribbon" title="Approved" bg_color="text-bg-success"
+                        invisible="material_sub_type != 'approved' or _is_work_task == False or  stage_type != 'material'"/>
+                <widget name="web_ribbon" title="Pending" bg_color="text-bg-warning"
+                        invisible="material_sub_type != 'pending' or _is_work_task == False or  stage_type != 'material'"/>
+                <widget name="web_ribbon" title="Revision" bg_color="text-bg-warning"
+                        invisible="material_sub_type != 'revision' or _is_work_task == False or  stage_type != 'material'"/>
+                <widget name="web_ribbon" title="Submitted" bg_color="text-bg-info"
+                        invisible="material_sub_type != 'submitted' or _is_work_task == False or  stage_type != 'material'"/>
+                <widget name="web_ribbon" title="Approved" bg_color="text-bg-success"
+                        invisible="sample_sub_type != 'approved' or _is_work_task == False or  stage_type != 'sample'"/>
+                <widget name="web_ribbon" title="Pending" bg_color="text-bg-warning"
+                        invisible="sample_sub_type != 'pending' or _is_work_task == False or  stage_type != 'sample'"/>
+                <widget name="web_ribbon" title="Revision" bg_color="text-bg-warning"
+                        invisible="sample_sub_type != 'revision' or _is_work_task == False or  stage_type != 'sample'"/>
+                <widget name="web_ribbon" title="Submitted" bg_color="text-bg-info"
+                        invisible="sample_sub_type != 'submitted' or _is_work_task == False or  stage_type != 'sample'"/>
+                <widget name="web_ribbon" title="Pass" bg_color="text-bg-success"
+                        invisible="qa_qc_status != 'pass' or _is_work_task == False or  stage_type != 'qa_qc'"/>
+                <widget name="web_ribbon" title="Pass" bg_color="text-bg-danger"
+                        invisible="qa_qc_status != 'fail' or _is_work_task == False or  stage_type != 'qa_qc'"/>
+                <widget name="web_ribbon" title="Pending" bg_color="text-bg-info"
+                        invisible="settlement_status != 'pending' or _is_work_task == False or  stage_type != 'built_submission'"/>
+                <widget name="web_ribbon" title="Submit" bg_color="text-bg-success"
+                        invisible="settlement_status != 'submit' or _is_work_task == False or  stage_type != 'built_submission'"/>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="attributes">
+                <attribute name="readonly">_is_estimation_task == True or _revision_task == True</attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_open_related_sale_order" type="object"
+                        string="All Sale Order" icon="fa-pencil-square-o"
+                        class="btn-primary" invisible="_is_estimation_task == False"
+                />
+                <button name="action_related_sale_order" type="object"
+                        string="Sale Order" icon="fa-pencil-square-o"
+                        class="btn-primary" invisible="_revision_task == False"
+                />
+                <button name="action_open_related_mrq" type="object"
+                        string="Material Request" icon="fa-pencil-square-o"
+                        class="btn-primary" invisible="_is_work_task == False"
+                />
+            </xpath>
+            <xpath expr="//field[@name='description']" position="after">
+                <label for="refuse_reason" invisible=" _is_estimation_task == False and _revision_task == False"/>
+                <field name="refuse_reason" readonly="1"
+                       invisible=" _is_estimation_task == False and _revision_task == False"/>
+            </xpath>
+            <xpath expr="//field[@name='milestone_id']" position="before">
+                <field name="sequence_code" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='active']" position="before">
+                <field name="crm_sequence_code" readonly="1"
+                       invisible="_is_estimation_task == False or _revision_task == False"/>
+                <field name="job_name" readonly="1"/>
+                <field name="job_status" readonly="1"
+                       invisible="_is_estimation_task == False or _revision_task == False"/>
+                <field name="enquiry_date" readonly="1"
+                       invisible="_is_estimation_task == False or _revision_task == False"/>
+                <field name="wrk_start_date" invisible="_is_work_task == False"/>
+                <field name="wrk_end_date" invisible="_is_work_task == False"/>
+                <field name="actual_wrk_start_date" invisible="_is_work_task == False"/>
+                <field name="actual_wrk_end_date" invisible="_is_work_task == False"/>
+                <field name="delay" invisible="_is_work_task == False" readonly="1"/>
+                <field name="stage_wk" readonly="1" invisible="1" widget="badge"/>
+                <field name="stage_engineering" readonly="1" invisible="1" widget="badge"/>
+                <field name="stage_qa" readonly="1" invisible="is_qa_qc_task == False" widget="badge"/>
+            </xpath>
+            <xpath expr="//label[@for='repeat_interval']" position="before">
+                <field name="partner_id"
+                       readonly="_is_estimation_task == True or _revision_task == True or _is_work_task == True"/>
+            </xpath>
+            <xpath expr="//field[@name='stage_id']" position="before">
+                <button name="action_approve_estimation" string="Approve"
+                        type="object" class="oe_highlight" data-hotkey="o"
+                        invisible="estimation_status in ['approve', 'refuse_estimation'] or _is_estimation_task == False or _revision_task ==True"/>
+                <button name="action_assign_to" type="object"
+                        string="Assign To" class="btn-primary"
+                        invisible="_is_estimation_task == False and _revision_task == False or estimation_status in ['approve', 'refuse_estimation'] or assigned_to_done == True"
+                />
+                <button name="action_approve_revision_estimation" string="Approve"
+                        type="object" class="oe_highlight" data-hotkey="o"
+                        invisible="estimation_status in ['approve', 'refuse_estimation'] or _revision_task == False"/>
+                <button name="action_refuse_estimation" string="Refuse"
+                        type="object" class="oe_highlight" data-hotkey="o"
+                        invisible="estimation_status in ['approve', 'refuse_estimation'] or _is_estimation_task == False  or _revision_task ==True"/>
+                <button name="action_refuse_revision_estimation" string="Refuse"
+                        type="object" class="oe_highlight" data-hotkey="o"
+                        invisible="estimation_status in ['approve', 'refuse_estimation'] or _revision_task == False"/>
+                <button name="action_cancel_estimation" string="Cancel"
+                        type="object" class="oe_highlight" data-hotkey="o"
+                        invisible="estimation_status in ['approve', 'refuse_estimation'] or _is_estimation_task == False and _revision_task == False "/>
+                <button name="action_export_boq_item" type="object" string="Export Template" class="btn btn-primary"
+                        invisible="_is_estimation_task == False and _revision_task == False or estimation_status in ['approve', 'refuse_estimation']"/>
+                <button name="action_boq_upload_item" type="object" string="Import BOQ Item" class="oe_highlight"
+                        invisible="_is_estimation_task == False and _revision_task == False or estimation_status in ['approve', 'refuse_estimation']"/>
+                <button name="action_create_mrp" type="object" string="Create Mrp" class="oe_highlight"
+                        invisible="1"/>
+                <button name="action_completed_engineering" type="object" string="Completed" class="oe_highlight"
+                        invisible="is_eng_task == False or stage_engineering != 'waiting'"/>
+                <button name="action_completed_qa" type="object" string="Completed" class="oe_highlight"
+                        invisible="is_qa_qc_task == False or stage_qa != 'waiting'"/>
+                <button name="action_material_request" type="object" string="Material Request" class="oe_highlight"
+                        invisible="_is_work_task == False or stage_type in ['shop_drawing','design','material','sample']"/>
+                <button name="action_approve_shop_drawing" type="object"
+                        string="Approve"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or shop_drawing_approve == True or shop_drawing_type not in  ['submitted','revision'] or stage_type!='shop_drawing'"
+                />
+                <button name="action_reject_shop_drawing" type="object"
+                        string="Reject"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or shop_drawing_approve == True or shop_drawing_type not in  ['submitted','revision'] or stage_type!='shop_drawing'"
+                />
+                <button name="action_submit_shop_drawing" type="object"
+                        string="Submit"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or shop_drawing_type != 'pending' or stage_type!='shop_drawing'"
+                />
+                <button name="action_submit_design" type="object"
+                        string="Submit"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or design_type != 'pending' or stage_type!='design'"
+                />
+                <button name="action_approve_design" type="object"
+                        string="Approve"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or design_type not in  ['submitted','revision'] or stage_type!='design'"
+                />
+                <button name="action_reject_design" type="object"
+                        string="Reject"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or design_type not in  ['submitted','revision'] or stage_type!='design'"
+                />
+                <button name="action_submit_material_sub" type="object"
+                        string="Submit"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or material_sub_type != 'pending' or stage_type!='material'"
+                />
+                <button name="action_approve_material_sub" type="object"
+                        string="Approve"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or material_sub_type not in  ['submitted','revision'] or stage_type!='material'"
+                />
+                <button name="action_reject_material_sub" type="object"
+                        string="Reject"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or material_sub_type not in  ['submitted','revision'] or stage_type!='material'"
+                />
+                <button name="action_submit_sample_sub" type="object"
+                        string="Submit"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or sample_sub_type != 'pending' or stage_type!='sample'"
+                />
+                <button name="action_approve_sample_sub" type="object"
+                        string="Approve"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or sample_sub_type not in  ['submitted','revision'] or stage_type!='sample'"
+                />
+                <button name="action_reject_sample_sub" type="object"
+                        string="Reject"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or sample_sub_type not in  ['submitted','revision'] or stage_type!='sample'"
+                />
+                <button name="action_mir_approve" type="object"
+                        string="Approve"
+                        class="btn-primary"
+                        invisible="_is_work_task == False  or stage_type!='mir_approved' or mir_status == 'mir_approve'"
+                />
+                <button name="action_mir_reject" type="object"
+                        string="Reject"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or stage_type!='mir_approved'  or mir_status == 'mir_approve'"
+                />
+                <button name="action_pass_qa_qc" type="object"
+                        string="Pass"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or stage_type!='qa_qc' or qa_qc_status == 'pass'"
+                />
+                <button name="action_fail_qa_qc" type="object"
+                        string="Fail"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or stage_type!='qa_qc' or qa_qc_status == 'pass'"
+                />
+
+                <button name="action_pass_wir" type="object"
+                        string="Pass"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or stage_type!='wir' or wir_status == 'pass'"
+                />
+                <button name="action_fail_wir" type="object"
+                        string="Fail"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or stage_type!='wir' or wir_status == 'pass'"
+                />
+                <button name="action_submit_base_settlement" type="object"
+                        string="Base Settlement"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or stage_type!='built_submission' or settlement_status == 'submit'"
+                />
+                <button name="action_create_invoice" type="object"
+                        string="Invoice"
+                        class="btn-primary"
+                        invisible="_is_work_task == False or stage_type!='built_submission' or settlement_status != 'submit'"
+                />
+            </xpath>
+            <xpath expr="//page[@name='description_page']" position="after">
+                <page name="boq_material_ids" string="BOQ Estimation"
+                      invisible="_is_estimation_task == False and _revision_task == False">
+                    <field name="boq_material_ids" widget="one2many">
+                        <tree string="BOQ" editable="bottom" create="0">
+                            <field name="task_id" column_invisible="1"/>
+                            <field name="project_id" column_invisible="1"/>
+                            <field name="sequence" readonly="1"/>
+                            <field name="product_id"/>
+                            <field name="description"/>
+                            <field name="quantity"/>
+                            <field name="uom"/>
+                            <field name="unit_price"/>
+                            <field name="subtotal"/>
+                        </tree>
+                    </field>
+                    <div class="oe_title" style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                        <label for="total_estimation" string="Total Boq Estimation:"
+                               style="margin-right: 5px;"/>
+                        <field name="total_estimation"/>
+                    </div>
+                    <group string="Project Estimation Value" name="project_estimation"
+                           groups="arm_customization.group_admin_manager">
+                        <field name="ohp" class="oe_inline"/>
+                        <field name="bd_fee" class="oe_inline"/>
+                        <field name="actual_cost" class="oe_inline"/>
+                    </group>
+                </page>
+                <page name="assemble_line_ids" string="Assembly"
+                      invisible="_is_work_task == False">
+                    <button name="action_export_assemble_item" type="object" string="Export Template"
+                            class="btn btn-primary"
+                            invisible="stage_type not in ['fabrication']"/>
+                    <button name="action_assemble_upload_item" type="object" string="Import Assemble Item"
+                            class="oe_highlight"
+                            invisible="stage_type not in ['fabrication']"/>
+                    <field name="assemble_line_ids" widget="one2many">
+                        <tree string="Assemble Line" editable="bottom" create="0" delete="0" readonly="1">
+                            <field name="work_id" column_invisible="1"/>
+                            <field name="project_id" column_invisible="1"/>
+                            <field name="created" column_invisible="1"/>
+                            <field name="stage" column_invisible="1"/>
+                            <field name="stage_type" column_invisible="1"/>
+                            <field name="assemble_mark" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="qty" readonly="1" sum="Total Assembles"/>
+                            <field name="name" readonly="1"/>
+                            <field name="profile" readonly="1"/>
+                            <field name="net_for_one" readonly="1"/>
+                            <field name="net_for_all" readonly="1" sum="Total Net Area"/>
+                            <field name="net_weight_for_one" readonly="1"/>
+                            <field name="net_weight_for_all" readonly="1" sum="Total Net Weight"/>
+                            <field name="related_mrp" readonly="1"/>
+                            <field name="invoice_percentage" readonly="1" column_invisible="1"/>
+                            <field name="state" widget="badge" column_invisible="1"/>
+                            <field name="production_status" widget="badge" readonly="1"
+                                   decoration-success="production_status == 'done'"/>
+                            <field name="item_status" widget="badge" readonly="1"
+                                   decoration-success="item_status == 'delivered'"
+                                   decoration-warning="item_status == 'not_delivered'"/>
+                            <field name="invoice_status" column_invisible="1"/>
+                            <button name="action_approve" type="object" string="Create Mrp"
+                                    class="oe_highlight btn btn-success"
+                                    invisible="stage_type !='production' or created== True"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="shop_drawing_line" string="Engineering Status"
+                      invisible="_is_work_task == False">
+                    <group>
+                        <group>
+                            <field name="shop_drawing_submitted_date" readonly="1"/>
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+                    <separator string="Shop Drawing" colspan="4" style="font-size:25px;"/>
+                    <field name="shop_drawing_line_ids" widget="one2many">
+                        <tree string="Shop Drawing Line" editable="0" readonly="1" delete="0" create="0">
+                            <field name="task_id" column_invisible="1"/>
+                            <field name="revision_shop_drawing_count" column_invisible="1"/>
+                            <field name="submitted_date" readonly="1"/>
+                            <field name="command_date" readonly="1"/>
+                            <field name="comments" readonly="1"/>
+                            <field name="revision" readonly="1"/>
+                            <field name="type" widget="badge" decoration-danger="type == 'revision'"
+                                   decoration-success="type == 'approve'" readonly="1"/>
+                        </tree>
+                    </field>
+                    <separator string="Design Calculation" colspan="4" style="font-size:25px;"/>
+                    <group>
+                        <group>
+                            <field name="shop_design_submitted_date" readonly="1"/>
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+                    <field name="design_line_ids" widget="one2many">
+                        <tree string="Design Line" editable="0" readonly="1" delete="0" create="0">
+                            <field name="task_id" column_invisible="1"/>
+                            <field name="revision_shop_drawing_count" column_invisible="1"/>
+                            <field name="submitted_date" readonly="1"/>
+                            <field name="command_date" readonly="1"/>
+                            <field name="comments" readonly="1"/>
+                            <field name="revision" readonly="1"/>
+                            <field name="type" widget="badge" decoration-danger="type == 'revision'"
+                                   decoration-success="type == 'approve'" readonly="1"/>
+                        </tree>
+                    </field>
+                    <separator string="Material Submission" colspan="4" style="font-size:25px;"/>
+                    <group>
+                        <group>
+                            <field name="shop_material_sub_submitted_date" readonly="1"/>
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+                    <field name="material_submission_line_ids" widget="one2many">
+                        <tree string="Material Submission Line" editable="0" readonly="1" delete="0" create="0">
+                            <field name="task_id" column_invisible="1"/>
+                            <field name="revision_shop_drawing_count" column_invisible="1"/>
+                            <field name="submitted_date" readonly="1"/>
+                            <field name="command_date" readonly="1"/>
+                            <field name="comments" readonly="1"/>
+                            <field name="revision" readonly="1"/>
+                            <field name="type" widget="badge" decoration-danger="type == 'revision'"
+                                   decoration-success="type == 'approve'" readonly="1"/>
+                        </tree>
+                    </field>
+                    <separator string="Sample Submission" colspan="4" style="font-size:25px;"/>
+                    <group>
+                        <group>
+                            <field name="shop_sample_sub_submitted_date" readonly="1"/>
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+                    <field name="sample_submission_line_ids" widget="one2many">
+                        <tree string="Sample Submission Line" editable="0" readonly="1" delete="0" create="0">
+                            <field name="task_id" column_invisible="1"/>
+                            <field name="revision_shop_drawing_count" column_invisible="1"/>
+                            <field name="submitted_date" readonly="1"/>
+                            <field name="command_date" readonly="1"/>
+                            <field name="comments" readonly="1"/>
+                            <field name="revision" readonly="1"/>
+                            <field name="type" widget="badge" decoration-danger="type == 'revision'"
+                                   decoration-success="type == 'approve'" readonly="1"/>
+                        </tree>
+                    </field>
+                    <separator string="QA/QC Fail" colspan="4" style="font-size:25px;"/>
+                    <field name="qa_qc_line_ids" widget="one2many">
+                        <tree string="Qa Qc Line" editable="0" readonly="1" delete="0" create="0">
+                            <field name="task_id" column_invisible="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="submitted_date" readonly="1"/>
+                            <field name="fail_type" readonly="1"/>
+                            <field name="reason" readonly="1"/>
+                        </tree>
+                    </field>
+                    <separator string="WIR Fail" colspan="4" style="font-size:25px;"/>
+                    <field name="wir_line_ids" widget="one2many">
+                        <tree string="WIR Line" editable="0" readonly="1" delete="0" create="0">
+                            <field name="task_id" column_invisible="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="submitted_date" readonly="1"/>
+                            <field name="fail_type" readonly="1"/>
+                            <field name="reason" readonly="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='stage_id']" position="attributes">
+                <attribute name="invisible">_is_estimation_task==True or _revision_task==True</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_kanban_form_inherited_arm" model="ir.ui.view">
+        <field name="name">project.task.kanban.inherit.arm</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='rating_avg']" position="after">
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="_is_estimation_task"/>
+                <field name="_is_work_task"/>
+                <field name="is_eng_task"/>
+                <field name="_revision_task"/>
+                <field name="is_qa_qc_task"/>
+                <field name="revision_name"/>
+                <field name="crm_lead_id"/>
+                <field name="crm_sequence_code"/>
+                <field name="job_wrk_name"/>
+                <field name="job_eng_name"/>
+                <field name="estimation_status" invisible="_is_estimation_task == False and _revision_task == False"/>
+                <field name="stage_type"/>
+                <field name="job_name"/>
+                <field name="job_status"/>
+                <field name="enquiry_date"/>
+                <field name="stage_wk"/>
+                <field name="stage_engineering"/>
+                <field name="stage_qa"/>
+            </xpath>
+             <xpath expr="//field[@name='project_id']" position="attributes">
+                 <attribute name="invisible">1</attribute>
+             </xpath>
+            <xpath expr="//div[hasclass('o_kanban_record_body')]" position="before">
+                <div class="kanban_data" style="color:red;"
+                     invisible="_is_estimation_task == False and _revision_task == False">
+                    <strong>
+                        <field name="revision_name"
+                               invisible="_is_estimation_task == False and _revision_task == False"/>
+                    </strong>
+                </div>
+                <div class="crm_sequence_code" style="color:blue;"
+                     invisible="_is_estimation_task == False and _revision_task == False">
+                    <field name="crm_sequence_code" invisible="1"/>
+                </div>
+                <div class="project_id" style="color:blue;" invisible="_is_work_task == False">
+                    <field name="project_id" invisible="1"/>
+                </div>
+                <div class="job_name" style="color:#de9525;"
+                     invisible="_is_estimation_task == False and _revision_task == False">
+                    <span>Job Name:</span>
+                    <field name="job_name"/>
+                </div>
+                <div class="job_name" style="color:#de9525;" invisible="_is_work_task == False">
+                    <span>Work Name:</span>
+                    <field name="job_wrk_name"/>
+                </div>
+                <div class="job_status" style="color:#ded825;"
+                     invisible="_is_estimation_task == False and _revision_task == False">
+                    <span>Job Status:</span>
+                    <field name="job_status"/>
+                </div>
+                <div class="enquiry_date" style="color:#3199de;"
+                     invisible="1">
+                    <span>Enquiry Date:</span>
+                    <field name="enquiry_date"/>
+                </div>
+                <div class="kanban_details" invisible="not start_date">
+                    <field name="start_date" class="oe_inline" style="color:#58bf35;"/>
+                    <span>
+                        <i class="fa fa-long-arrow-right oe_inline" aria-label="Arrow icon" title="Arrow"/>
+                    </span>
+                    <field name="end_date" class="oe_inline" style="color:#e2610d;"/>
+                </div>
+
+            </xpath>
+            <xpath expr="//strong[hasclass('o_kanban_record_title')]" position="before">
+                <div style="float:right;" invisible="_is_estimation_task == False and _revision_task == False">
+                    <field name="estimation_status" widget="badge" decoration-success="estimation_status in[ 'approve']"
+                           decoration-warning="estimation_status == 'refuse_estimation'"
+                           decoration-danger="estimation_status in['cancel']"
+                           decoration-info="estimation_status in['under_estimation']"/>
+                </div>
+                <div style="float:right;" invisible="_is_work_task == False or stage_type != 'shop_drawing'">
+                    <field name="shop_drawing_type" widget="badge"
+                           decoration-success="shop_drawing_type in ['approved']"
+                           decoration-warning="shop_drawing_type in ['pending','revision']"
+                           decoration-info="shop_drawing_type in ['submitted']"/>
+                </div>
+                <div style="float:right;" invisible="_is_work_task == False or stage_type != 'design'">
+                    <field name="design_type" widget="badge"
+                           decoration-success="design_type in ['approved']"
+                           decoration-warning="design_type in ['pending','revision']"
+                           decoration-info="design_type in ['submitted']"/>
+                </div>
+                <div style="float:right;" invisible="_is_work_task == False or stage_type != 'material'">
+                    <field name="material_sub_type" widget="badge"
+                           decoration-success="material_sub_type in ['approved']"
+                           decoration-warning="material_sub_type in ['pending','revision']"
+                           decoration-info="material_sub_type in ['submitted']"/>
+                </div>
+                <div style="float:right;" invisible="_is_work_task == False or stage_type != 'sample'">
+                    <field name="sample_sub_type" widget="badge"
+                           decoration-success="sample_sub_type in ['approved']"
+                           decoration-warning="sample_sub_type in ['pending','revision']"
+                           decoration-info="sample_sub_type in ['submitted']"/>
+                </div>
+                <div style="float:right;" invisible="_is_work_task == False or stage_type != 'mir_approved'">
+                    <field name="mir_status" widget="badge"
+                           decoration-success="mir_status == 'mir_approve'"
+                           decoration-warning="mir_status == 'mir_reject'"/>
+                </div>
+                <div style="float:right;" invisible="_is_work_task == False or stage_type != 'eraction'">
+                    <field name="eraction_status" widget="badge"
+                           decoration-success="eraction_status in[ 'drawing','completed']"
+                           decoration-warning="eraction_status == 'installation'"/>
+                </div>
+                <div style="float:right;" invisible="_is_work_task == False or stage_type != 'qa_qc'">
+                    <field name="qa_qc_status" widget="badge" invisible="qa_qc_status not in ['pass','fail']"
+                           decoration-success="qa_qc_status in[ 'pass']"
+                           decoration-danger="qa_qc_status == 'fail'"/>
+                </div>
+
+                <div style="float:right;" invisible="_is_work_task == False or stage_type != 'built_submission'">
+                    <field name="settlement_status" widget="badge"
+                           invisible="settlement_status not in ['pending','submit']"
+                           decoration-info="settlement_status in[ 'pending']"
+                           decoration-success="settlement_status == 'submit'"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_form2_inherited_arm_property" model="ir.ui.view">
+        <field name="name">project.task.form.inherited.property.arm.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='page_timesheets']" position="attributes">
+                <attribute name="invisible">is_eng_task == True or is_qa_qc_task == True</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_form2_inherited" model="ir.ui.view">
+        <field name="name">project.task.tree.inherited.property.arm.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.project_task_view_tree_main_base"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='progress']" position="before">
+                <field name="_is_work_task" column_invisible="1"/>
+                <field name="wr_progress" readonly="1" widget="project_task_progressbar"
+                       invisible="_is_work_task == False"/>
+            </xpath>
+        </field>
+    </record>
+      <record id="project_task_view_kanban_property_arm2" model="ir.ui.view">
+        <field name="name">project.task.kanban.property.arm2</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <kanban position="attributes">
+                <attribute name="default_group_by"/>
+                 <attribute name="default_order">date_deadline</attribute>
+                <attribute name="default_group_by">date_deadline:day</attribute>
+            </kanban>
+        </field>
+      </record>
+
+
+
+    <record id="action_estimation_task" model="ir.actions.act_window">
+        <field name="name">Estimation Task</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="project.view_task_search_form"/>
+        <field name="view_id" ref="arm_customization.project_task_view_kanban_property_arm2"/>
+        <field name="domain">['|',('_is_estimation_task', '=', True),('_revision_task', '=', True)]</field>
+        <field name="context">{'default__is_estimation_task': True, 'search_default_open_tasks': 1,'create':
+            False,'delete': False,}
+        </field>
+        <field name="help" type="html">
+            <p>
+                View Estimation Task
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem
+            name="Estimation Task"
+            id="menu_root_estimation_task"
+            active="True"
+            groups="arm_customization.group_estimation_user,group_estimation_manager"
+            web_icon="arm_customization,static/description/icon1.png"
+            sequence="10">
+
+        <menuitem id="menu_estimation_task"
+                  name="Estimation Task"
+                  action="action_estimation_task"
+                  sequence="10"/>
+
+    </menuitem>
+</odoo>

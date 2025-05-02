@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_project_form_inherited_arm" model="ir.ui.view">
+        <field name="name">project.project.form.inherit.arm</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="crm_lead_id" string="Enquiry" readonly="1"/>
+                <field name="is_work_order_created" invisible="1"/>
+                <field name="type_project" invisible="1"/>
+                <field name="is_adv_created" invisible="1"/>
+                <field name="is_not_adv_created" invisible="1"/>
+                <field name="project_adv" invisible="1"/>
+                <field name="project_total_amount_adv" invisible="1"/>
+                <field name="advance_recovery" invisible="1"/>
+                <field name="last_invoice" invisible="1"/>
+                <field name="adv_per" invisible="1"/>
+                <field name="wrk_sale_order_id" readonly="1" invisible="_work_order_prj == False"/>
+                <field name="project_total_amount" readonly="1" invisible="_work_order_prj == False"/>
+                <field name="total_invoiced_amount" readonly="1" invisible="_work_order_prj == False"/>
+            </xpath>
+            <xpath expr="//field[@name='label_tasks']" position="after">
+                <field name="partner_id"/>
+                <field name="job_name" invisible="esm_prjct != True"/>
+                <field name="job_sale_name" invisible="1"/>
+                <field name="job_status" invisible="_work_order_prj != True"/>
+                <field name="_work_order_prj" invisible="1"/>
+                <field name="esm_prjct" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                     <field name="adv_recvry"/>
+                     <field name="retention_amount"/>
+                     <field name="retention_dates"/>
+                     <field name="location"/>
+                     <field name="lpo_number"/>
+                     <field name="lpo_date"/>
+                     <field name="currency_id" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//page[@name='description']" position="after">
+                <page name="boq_lines" string="BOQ">
+                    <field name="project_boq_line" widget="one2many">
+                        <tree string="BOQ Lines" editable="bottom">
+                            <field name="project_id" column_invisible="1"/>
+                            <field name="work_order"/>
+                            <field name="total_invoice_amount" column_invisible="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="description" readonly="1"/>
+                            <field name="quantity" readonly="1"/>
+                            <field name="uom" readonly="1"/>
+                            <field name="unit_price" readonly="1"/>
+                            <field name="subtotal" readonly="1"/>
+                            <field name="invoice_percentage" readonly="1"/>
+                            <field name="balance_percentage" readonly="1"/>
+                            <field name="sub_total_amount_adv" column_invisible="1"/>
+                            <field name="sub_total_amount_adv_paid" column_invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="assembly_line_ids" string="Assembly Lines">
+                    <field name="project_assembly_line_ids" widget="one2many">
+                        <tree string="Assembly Lines" editable="bottom">
+                            <field name="project_id" column_invisible="1"/>
+                            <field name="work_id"/>
+                            <field name="created" column_invisible="1"/>
+                            <field name="stage" column_invisible="1"/>
+                            <field name="stage_type" column_invisible="1"/>
+                            <field name="assemble_mark" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="qty" readonly="1" sum="Total Assembles"/>
+                            <field name="name" readonly="1"/>
+                            <field name="profile" readonly="1"/>
+                            <field name="net_for_one" readonly="1"/>
+                            <field name="net_for_all" readonly="1" sum="Total Net Area"/>
+                            <field name="net_weight_for_one" readonly="1"/>
+                            <field name="net_weight_for_all" readonly="1" sum="Total Net Weight"/>
+                            <field name="related_mrp" readonly="1"/>
+                            <field name="state" widget="badge" column_invisible="1"/>
+                            <field name="production_status" widget="badge" readonly="1"
+                                   decoration-success="production_status == 'done'"/>
+                            <field name="item_status" widget="badge" readonly="1"
+                                   decoration-success="item_status == 'delivered'"
+                                   decoration-warning="item_status == 'not_delivered'"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="cost_center" string="Cost Center">
+                    <group>
+                           <field name="currency_id" invisible="1"/>
+                           <field name="estimation_amount"/>
+                           <field name="quotation_amount"/>
+                           <field name="total_invoiced_amount"/>
+                           <field name="total_invoiced_amount_with_tax"/>
+                           <field name="pending_invoice_amount"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_create_worker" string="Create Worker Order" type="object"
+                        invisible="_work_order_prj != True or is_work_order_created == True"
+                        class="oe_highlight" groups="arm_customization.group_work_order_project"/>
+                <button name="create_adv_invoice" string="Create Advance Invoice" type="object"
+                        invisible="1"
+                        class="oe_highlight"/>
+                <button name="create_invoice_prj" string="Create Invoice" type="object"
+                        invisible="_work_order_prj != True"
+                        class="oe_highlight"/>
+                  <button name="create_delivery_order_prj" string="Create Delivery" type="object"
+                        invisible="_work_order_prj != True"
+                        class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//button[@name='project_update_all_action']" position="after">
+                <button name="action_open_project_planning" type="object"
+                        string="Project Planning" icon="fa-tasks" invisible="_work_order_prj != True"
+                        class="btn-primary"
+                />
+                <button name="action_open_all_po" type="object"
+                        string="Purchase Order" icon="fa-tasks"
+                        class="btn-primary"
+                />
+                <button name="action_open_all_material_request" type="object"
+                        string="Material Request" icon="fa-tasks"
+                        class="btn-primary"
+                />
+                <button name="action_open_all_invoices" type="object"
+                        string="Invoices" icon="fa-tasks"
+                        class="btn-primary"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_list_view_arm" model="ir.ui.view">
+        <field name="name">project.project.list.arm</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="_work_order_prj" column_invisible="1"/>
+                <field name="job_sale_name" string="Work order" invisible="_work_order_prj == False"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_project_project_filter_inherit_arm" model="ir.ui.view">
+        <field name="name">project.project.view.inherit.arm</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_project_filter"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="job_sale_name" string="Job"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="project_task_type_inherited_arm" model="ir.ui.view">
+        <field name="name">project.task.type.form.inherit.arm</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_edit"/>
+        <field name="arch" type="xml">
+            <field name="fold" position="after">
+                <field name="stage_type"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="project_task_type_tree_view_inherited_arm" model="ir.ui.view">
+        <field name="name">project.task.type.view.tree.inherit.arm</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_tree_inherited"/>
+        <field name="arch" type="xml">
+            <field name="project_ids" position="after">
+                <field name="stage_type"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="project.menu_main_pm" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(4, ref('project.group_project_manager')),(3, ref('project.group_project_user'))]"/>
+    </record>
+
+    <record id="project.menu_projects_group_stage" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(4, ref('project.group_project_manager')),(3, ref('project.group_project_stages'))]"/>
+    </record>
+
+
+    <menuitem
+            name="Tasks"
+            id="project.menu_project_management"
+            sequence="2"
+            active="False"
+    >
+        <menuitem
+                name="My Tasks"
+                id="project.menu_project_management_my_tasks"
+                action="project.action_server_view_my_task"
+                sequence="1"
+                active="False"
+        />
+        <menuitem
+                name="All Tasks"
+                id="project.menu_project_management_all_tasks"
+                action="project.action_view_all_task"
+                sequence="2"
+                active="False"
+        />
+    </menuitem>
+</odoo>

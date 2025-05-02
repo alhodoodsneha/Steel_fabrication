@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pdc_payment_submit_form" model="ir.ui.view">
+        <field name="name">pdc.payment.submit.form.view</field>
+        <field name="model">pdc.payment.submit</field>
+        <field name="arch" type="xml">
+            <form string="Submitted">
+                <header>
+                    <field name="status" widget="statusbar" readonly="1"/>
+                    <button name="action_deposit" string="Deposited" type="object" invisible="status != 'received'"
+                            class="btn btn-primary"/>
+                    <button name="action_reject" string="Bounced" type="object" invisible="status != 'received'"
+                            class="btn btn-primary"/>
+                    <button name="action_hold" string="Hold" type="object" invisible="status != 'matured'"
+                            class="btn btn-primary"/>
+                    <button name="action_returned" string="Returned" type="object" invisible="status != 'matured'"
+                            class="btn btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="cheque_no" required="1" readonly="status != 'received'"/>
+                            <field name="supplier_id" required="1" readonly="status != 'received'"/>
+                            <field name="cheque_date" required="1" readonly="status != 'received'"/>
+                        </group>
+                        <group>
+                            <field name="amount" required="1" readonly="status != 'received'"/>
+                            <field name="bank" required="1" readonly="status != 'received'"/>
+                            <field name="is_delayed" invisible="1" readonly="status != 'received'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="reject_reason" string="Reject Reason">
+                            <field name="reject_reason" no_label="1" readonly="1"/>
+                        </page>
+                        <page name="hold_reason" string="Hold Reason">
+                            <field name="hold_reason" no_label="1" readonly="1"/>
+                        </page>
+                        <page name="return_reason" string="Return Reason">
+                            <field name="return_reason" no_label="1" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_pdc_payment_received_form" model="ir.ui.view">
+        <field name="name">pdc.payment.received.form.view</field>
+        <field name="model">pdc.payment.received</field>
+        <field name="arch" type="xml">
+            <form string="Received">
+                <header>
+                    <field name="status" widget="statusbar" readonly="1"/>
+                    <button name="action_deposit" string="Deposited" type="object" invisible="status != 'received'"
+                            class="btn btn-primary"/>
+                    <button name="action_reject" string="Bounced" type="object" invisible="status != 'received'"
+                            class="btn btn-primary"/>
+                    <button name="action_hold" string="Hold" type="object" invisible="status != 'matured'"
+                            class="btn btn-primary"/>
+                    <button name="action_returned" string="Returned" type="object" invisible="status != 'matured'"
+                            class="btn btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="cheque_no" required="1" readonly="status != 'received'"/>
+                            <field name="customer_id" required="1" readonly="status != 'received'"/>
+                            <field name="cheque_date" required="1" readonly="status != 'received'"/>
+                            <field name="is_delayed" invisible="1" readonly="status != 'received'"/>
+                        </group>
+                        <group>
+                            <field name="amount" required="1" readonly="status != 'received'"/>
+                            <field name="bank" required="1" readonly="status != 'received'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="reject_reason" string="Reject Reason">
+                            <field name="reject_reason" no_label="1" readonly="1"/>
+                        </page>
+                        <page name="hold_reason" string="Hold Reason">
+                            <field name="hold_reason" no_label="1" readonly="1"/>
+                        </page>
+                        <page name="return_reason" string="Return Reason">
+                            <field name="return_reason" no_label="1" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_received_pdc" model="ir.ui.view">
+        <field name="name">pdc.payment.received.tree.view</field>
+        <field name="model">pdc.payment.received</field>
+        <field name="arch" type="xml">
+            <tree string="Received" create="1" delete="1" decoration-danger="is_delayed == True"
+                  decoration-info="is_delayed == False and status == 'received' ">
+                <field name="cheque_no" readonly="1"/>
+                <field name="customer_id" readonly="1"/>
+                <field name="cheque_date" readonly="1"/>
+                <field name="amount" readonly="1"/>
+                <field name="bank" readonly="1"/>
+                <field name="is_delayed" column_invisible="1"/>
+                <field name="status" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tree_submitted_pdc" model="ir.ui.view">
+        <field name="name">pdc.payment.submit.tree.view</field>
+        <field name="model">pdc.payment.submit</field>
+        <field name="arch" type="xml">
+            <tree string="Submitted" create="1" delete="1" decoration-danger="is_delayed == True"
+                  decoration-info="is_delayed == False and status == 'received' ">
+                <field name="cheque_no" readonly="1"/>
+                <field name="supplier_id" readonly="1"/>
+                <field name="cheque_date" readonly="1"/>
+                <field name="amount" readonly="1"/>
+                <field name="bank" readonly="1"/>
+                <field name="is_delayed" column_invisible="1"/>
+                <field name="status" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_search_pdc_payment_submit" model="ir.ui.view">
+        <field name="name">pdc.payment.submit.search.view</field>
+        <field name="model">pdc.payment.submit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="status"/>
+                <field name="cheque_date"/>
+                <field name="is_delayed"/>
+
+                <filter string="Pending" name="filter_delayed" domain="[('cheque_date', '&lt;', context_today()), ('status', '=', 'received')]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Status" name="group_by_status" context="{'group_by':'status'}"/>
+                    <filter string="Cheque Date" name="group_by_cheque_date" context="{'group_by':'cheque_date'}"/>
+                    <filter string="Supplier" name="group_by_supplier_id" context="{'group_by':'supplier_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_search_pdc_payment_received" model="ir.ui.view">
+        <field name="name">pdc.payment.received.search.view</field>
+        <field name="model">pdc.payment.received</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="status"/>
+                <field name="cheque_date"/>
+                <field name="is_delayed"/>
+
+                <filter string="Pending" name="filter_delayed" domain="[('cheque_date', '&lt;', context_today()), ('status', '=', 'received')]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Status" name="group_by_status" context="{'group_by':'status'}"/>
+                    <filter string="Cheque Date" name="group_by_cheque_date" context="{'group_by':'cheque_date'}"/>
+                    <filter string="Customer" name="group_by_customer_id" context="{'group_by':'customer_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="action_submitted_pdc" model="ir.actions.act_window">
+        <field name="name">Submitted</field>
+        <field name="res_model">pdc.payment.submit</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_tree_submitted_pdc"/>
+        <field name="search_view_id" ref="view_search_pdc_payment_submit"/>
+        <field name="help" type="html">
+            <p>
+                Create and Manage PDC Submitted
+            </p>
+        </field>
+    </record>
+
+    <record id="action_received_pdc" model="ir.actions.act_window">
+        <field name="name">Received</field>
+        <field name="res_model">pdc.payment.received</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_tree_received_pdc"/>
+         <field name="search_view_id" ref="view_search_pdc_payment_received"/>
+        <field name="help" type="html">
+            <p>
+                Create and Manage PDC Received
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="PDC Payment"
+            id="menu_pdc_payment"
+            parent="account.menu_finance"
+            sequence="12"
+    >
+        <menuitem
+                name="Received"
+                id="menu_received_pdc"
+                action="action_received_pdc"
+                sequence="12"
+        />
+        <menuitem
+                name="Submitted"
+                id="menu_submitted_pdc"
+                action="action_submitted_pdc"
+                sequence="14"
+        />
+    </menuitem>
+
+</odoo>

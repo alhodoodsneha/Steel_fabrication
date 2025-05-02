@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_timesheet_line_tree_inherited_arm" model="ir.ui.view">
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='unit_amount']" position="after">
+                  <field name="is_project_manager" invisible="1"/>
+                <field name="state_approve" readonly="1" widget="badge" decoration-danger="state_approve == 'refuse'"
+                       decoration-success="state_approve == 'approve'"
+                       decoration-info="state_approve == 'waiting_for_approval'"/>
+                <button name="approve_timesheet" string="Approve" type="object"
+                        invisible="state_approve != 'waiting_for_approval' or is_project_manager == False" class="btn btn-success"/>
+                <button name="reject_timesheet" string="reject" type="object"
+                        invisible="state_approve != 'waiting_for_approval' or is_project_manager == False" class="btn btn-danger"/>
+            </xpath>
+            <xpath expr="//field[@name='date']" position="attributes">
+                <attribute name="readonly">readonly_timesheet or state_approve != 'waiting_for_approval'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="attributes">
+                <attribute name="readonly">readonly_timesheet or state_approve != 'waiting_for_approval'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='project_id']" position="attributes">
+                <attribute name="readonly">readonly_timesheet or state_approve != 'waiting_for_approval'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='task_id']" position="attributes">
+                <attribute name="readonly">readonly_timesheet or state_approve != 'waiting_for_approval'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">readonly_timesheet or state_approve != 'waiting_for_approval'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='unit_amount']" position="attributes">
+                <attribute name="readonly">readonly_timesheet or state_approve != 'waiting_for_approval'</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="action_view_waiting_for_approval" model="ir.actions.act_window">
+        <field name="name">Waiting For Approval</field>
+        <field name="res_model">account.analytic.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+         <field name="domain">[('state_approve', '=', 'waiting_for_approval')]</field>
+        <field name="context">{'create': False,'delete': False,'edit':False}</field>
+
+        <field name="help" type="html">
+            <p>
+                Timesheet for Approve
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_waiting_for_approval"
+              name="Waiting For Approval"
+              parent="hr_timesheet.timesheet_menu_root"
+              action="action_view_waiting_for_approval"
+              sequence="2"/>
+
+</odoo>

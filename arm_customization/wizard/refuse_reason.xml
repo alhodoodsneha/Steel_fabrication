@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+       <record id="assemble_rejection_wizard_form_view" model="ir.ui.view">
+        <field name="name">assemble.rejection.wizard.form.view</field>
+        <field name="model">assemble.rejection.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reason">
+               <group>
+                     <field name="feedback"/>
+               </group>
+                <footer>
+                    <button name="action_add_feedback" type="object"
+                            string="Done" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <record id="action_assemble_rejection_wizard" model="ir.actions.act_window">
+        <field name="name">Assemble Rejection Feedback</field>
+        <field name="res_model">assemble.rejection.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="assemble_rejection_wizard_form_view"/>
+    </record>
+</odoo>

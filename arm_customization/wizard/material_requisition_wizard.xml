@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="material_requisition_wizard_view" model="ir.ui.view">
+        <field name="name">material.requisition.wizard.form.view</field>
+        <field name="model">material.requisition.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Material Requisition">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="user_id" readonly="1"/>
+                            <field name="work_order" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="1"/>
+                            <field name="requisition_deadline"/>
+                            <field name="mrp_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Requisition Lines" name="requisition_lines_ids">
+                            <field name="material_line_ids" widget="one2many">
+                                <tree string="Material Lines" editable="bottom">
+                                    <field name="wizard_id" column_invisible="1"/>
+                                    <field name="item_id"/>
+                                    <field name="description"/>
+                                    <field name="kg_linear"/>
+                                    <field name="length"/>
+                                    <field name="width"/>
+                                    <field name="uom_id"/>
+                                    <field name="qty"/>
+                                    <field name="spec"/>
+                                    <field name="total_weight"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_done_material_request" type="object"
+                            string="Done" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+        <record id="material_rfq_wizard_view" model="ir.ui.view">
+        <field name="name">material.rfq.wizard.wizard.form.view</field>
+        <field name="model">material.rfq.wizard</field>
+        <field name="arch" type="xml">
+            <form string="RFQ Create">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="supplier_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create_rfq" type="object"
+                            string="Create RFQ" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_material_requisition_wizard" model="ir.actions.act_window">
+        <field name="name">Material Requisition Wizard</field>
+        <field name="res_model">material.requisition.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="material_requisition_wizard_view"/>
+    </record>
+
+     <record id="action_rfq_create_wizard" model="ir.actions.act_window">
+        <field name="name">RFQ Create Wizard</field>
+        <field name="res_model">material.rfq.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="material_rfq_wizard_view"/>
+    </record>
+</odoo>

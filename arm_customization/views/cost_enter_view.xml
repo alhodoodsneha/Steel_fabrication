@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_cost_center" model="ir.actions.act_window">
+        <field name="name">Cost Center</field>
+        <field name="res_model">account.analytic.account</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="analytic.view_account_analytic_account_search"/>
+        <field name="view_id" ref="analytic.view_account_analytic_account_kanban"/>
+        <field name="domain">[]</field>
+        <field name="context">{'create': False,'delete': False,'edit':False}</field>
+        <field name="help" type="html">
+            <p>
+                View Cost Center
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem
+            name="Cost Center"
+            id="menu_root_cost_center"
+            active="True"
+            web_icon="arm_customization,static/description/iconc.png"
+            groups="arm_customization.group_cost_center_view"
+            sequence="10">
+
+        <menuitem id="menu_cost_center"
+                  name="Cost Center"
+                  action="action_cost_center"
+                  sequence="10"/>
+
+    </menuitem>
+</odoo>

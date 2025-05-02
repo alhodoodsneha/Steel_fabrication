@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_assemble_task_tree" model="ir.ui.view">
+        <field name="name">assemble.qty.tree.view</field>
+        <field name="model">assemble.qty</field>
+        <field name="arch" type="xml">
+            <tree string="Assembles" create="0" delete="0">
+                <field name="work_id"/>
+                <field name="project_id"/>
+                <field name="partner_id"/>
+                <field name="created" column_invisible="1"/>
+                <field name="stage" column_invisible="1"/>
+                <field name="stage_type" column_invisible="1"/>
+                <field name="assemble_mark" readonly="1"/>
+                <field name="product_id" readonly="1"/>
+                <field name="qty" readonly="1" sum="Total Assembles"/>
+                <field name="name" readonly="1"/>
+                <field name="profile" readonly="1"/>
+                <field name="net_for_one" readonly="1"/>
+                <field name="net_for_all" readonly="1" sum="Total Net Area"/>
+                <field name="net_weight_for_one" readonly="1"/>
+                <field name="net_weight_for_all" readonly="1" sum="Total Net Weight"/>
+                <field name="related_mrp" readonly="1"/>
+                <field name="state" widget="badge" column_invisible="1"/>
+                <field name="production_status" widget="badge" readonly="1"
+                       decoration-success="production_status == 'done'"/>
+                <field name="item_status" widget="badge" readonly="1"
+                       decoration-success="item_status == 'delivered'"
+                       decoration-warning="item_status == 'not_delivered'"/>
+                <button name="action_approve" type="object" string="Create Mrp"
+                        class="oe_highlight btn btn-success"
+                        invisible="stage_type !='production' or created== True"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_view_operation_task" model="ir.actions.act_window">
+        <field name="name">Assembles</field>
+        <field name="res_model">assemble.qty</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_assemble_task_tree"/>
+          <field name="domain">[('production_status', '=', 'done'),('item_status','!=','delivered')]</field>
+        <field name="context">{'create': False,'delete': False,}
+        </field>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Operation
+            </p>
+        </field>
+    </record>
+      <record id="action_view_operation_task_delivered" model="ir.actions.act_window">
+        <field name="name">Assembles</field>
+        <field name="res_model">assemble.qty</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_assemble_task_tree"/>
+          <field name="domain">[('production_status', '=', 'done'),('item_status','=','delivered')]</field>
+        <field name="context">{'create': False,'delete': False,}
+        </field>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Operation
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="Operation"
+            id="nemu_operation_root"
+            active="True"
+            groups="arm_customization.group_operation_manager,arm_customization.group_operation_user"
+            web_icon="arm_customization,static/description/icont.png"
+            sequence="10">
+
+        <menuitem id="menu_operation_task_delivery"
+                  name="Assembles"
+                  action="action_view_operation_task"
+                  sequence="12"/>
+         <menuitem id="menu_operation_task"
+                  name="Delivered Assembles"
+                  action="action_view_operation_task_delivered"
+                  sequence="15"/>
+
+    </menuitem>
+</odoo>

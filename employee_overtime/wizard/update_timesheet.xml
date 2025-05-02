@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_update_timesheet_wizard_form" model="ir.ui.view">
+        <field name="name">update.timesheet.wizard.form</field>
+        <field name="model">update.timesheet.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Timesheet">
+                <group>
+                    <group>
+                       <field name="project_id"/>
+                    </group>
+                    <group>
+                        <field name="today_date" readonly="1"/>
+
+                    </group>
+                </group>
+                <field name="timesheet_lines">
+                    <tree editable="bottom">
+                        <field name="wizard_id" column_invisible="1" style="width:20%;"/>
+                        <field name="employee_id" required="1" style="width:40%;"/>
+                        <field name="hours" required="1" style="width:40%;"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button string="Update Timesheet" type="object" name="action_update_timesheet" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_update_timesheet_wizard" model="ir.actions.act_window">
+        <field name="name">Update Timesheet</field>
+        <field name="res_model">update.timesheet.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_update_timesheet_wizard_form"/>
+    </record>
+
+    <menuitem id="menu_update_timesheet"
+              name="Update Timesheet"
+              parent="hr_timesheet.timesheet_menu_root"
+              action="action_update_timesheet_wizard"
+              sequence="20"/>
+
+</odoo>

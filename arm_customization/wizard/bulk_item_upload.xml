@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bulk_item_upload_form" model="ir.ui.view">
+        <field name="name">bulk.item.upload.form</field>
+        <field name="model">bulk.item.upload</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Upload">
+                <group>
+                    <field name="file" filename="filename"/>
+                    <field name="filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button type="object" name="action_process_file" string="Upload" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_product_item_upload" model="ir.actions.act_window">
+        <field name="name">Product Item Upload</field>
+        <field name="res_model">bulk.item.upload</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_bulk_item_upload_form"/>
+    </record>
+</odoo>

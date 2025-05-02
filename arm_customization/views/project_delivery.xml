@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_form_project_delivery" model="ir.ui.view">
+        <field name="name">project.delivery.form.view</field>
+        <field name="model">project.delivery</field>
+        <field name="arch" type="xml">
+            <form string="Delivery Note">
+                <header>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="code"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="project_id" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="dispatch_doc_no"/>
+                            <field name="destination"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="location"/>
+                            <field name="lpo_number"/>
+                        </group>
+                        <group>
+                            <field name="sale_order_id" readonly="1"/>
+                            <field name="delivery_date" readonly="1"/>
+                            <field name="dispatch_through"/>
+                            <field name="delivery_mode"/>
+                            <field name="container_no_seal_no"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="lpo_date"/>
+                        </group>
+                    </group>
+                    <group string="Vehicle Details">
+                        <group>
+                            <field name="vehicle_no"/>
+                            <field name="drivers_mobile"/>
+                        </group>
+                        <group>
+                            <field name="drivers_name"/>
+                            <field name="port_of_loading"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <field name="terms_of_delivery"/>
+                    </group>
+                    <notebook>
+                        <page string="Delivery Lines" name="delivery_lines_ids">
+                            <field name="delivery_line_ids" widget="one2many" readonly="1">
+                                <tree string="Delivery Line" editable="0" create="0" delete="0">
+                                    <field name="delivery_id" column_invisible="1"/>
+                                    <field name="task_id"/>
+                                    <field name="assembly_id"/>
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="quantity" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_project_delivery_tree_view" model="ir.ui.view">
+        <field name="name">project.delivery.tree.view</field>
+        <field name="model">project.delivery</field>
+        <field name="arch" type="xml">
+            <tree string="Delivery Note" create="1" delete="1">
+                <field name="code"/>
+                <field name="project_id"/>
+                <field name="partner_id"/>
+                <field name="sale_order_id"/>
+                <field name="delivery_date"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- Action to open the list view of estimation model -->
+    <record id="action_project_delivery" model="ir.actions.act_window">
+        <field name="name">Delivery Note</field>
+        <field name="res_model">project.delivery</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_project_delivery_tree_view"/>
+        <field name="context">{'create': False,'delete': False,}</field>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Project Delivery
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="Delivery Note"
+            id="menu_project_delivery_root"
+            parent="arm_customization.nemu_operation_root"
+            action="action_project_delivery"
+            sequence="12"
+    />
+
+</odoo>

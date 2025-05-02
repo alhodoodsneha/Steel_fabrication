@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="res.groups" id="group_admin_manager">
+        <field name="name">Admin Manager</field>
+    </record>
+
+     <record model="res.groups" id="group_create_invoice_prj">
+        <field name="name">Create Invoice</field>
+    </record>
+
+     <record model="res.groups" id="group_material_requester">
+        <field name="name">Material Request Viewer</field>
+    </record>
+
+    <record model="res.groups" id="group_material_request_approver">
+        <field name="name">Material Request Approver</field>
+    </record>
+
+     <record model="res.groups" id="group_delete_user">
+        <field name="name">Delete User</field>
+    </record>
+
+     <record model="res.groups" id="group_cost_center_view">
+        <field name="name">Cost Center</field>
+    </record>
+
+      <record model="res.groups" id="group_account_approver">
+        <field name="name">Sales Approver</field>
+    </record>
+
+      <record model="res.groups" id="group_project_plan">
+        <field name="name">Notify Work Order Creation</field>
+    </record>
+
+    <record model="res.groups" id="group_work_order">
+        <field name="name">Work Order Creation</field>
+    </record>
+
+      <record model="res.groups" id="group_work_order_project">
+        <field name="name">Create Work Order Task In Project</field>
+    </record>
+
+     <record model="res.groups" id="group_customer_manager">
+        <field name="name">Customer Creation</field>
+    </record>
+
+    <record model="ir.module.category" id="module_project_team_category">
+        <field name="name">Project Team</field>
+        <field name="sequence">95</field>
+    </record>
+
+    <!-- Over Time Users -->
+
+     <record model="ir.module.category" id="module_project_planning_category">
+        <field name="parent_id" ref="module_project_team_category"/>
+        <field name="name">Project Planning</field>
+        <field name="sequence">4</field>
+    </record>
+    <record model="res.groups" id="group_project_planning_user">
+        <field name="name">Planning User</field>
+        <field name="category_id" ref="arm_customization.module_project_planning_category"/>
+    </record>
+    <record model="res.groups" id="group_project_planning_manager">
+        <field name="name">Planning Manger</field>
+        <field name="category_id" ref="arm_customization.module_project_planning_category"/>
+        <field name="implied_ids" eval="[(4, ref('arm_customization.group_project_planning_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!--    Estimation User Group-->
+    <record model="ir.module.category" id="module_estimation_category">
+        <field name="parent_id" ref="module_project_team_category"/>
+        <field name="name">Estimation</field>
+        <field name="sequence">4</field>
+    </record>
+    <record model="res.groups" id="group_estimation_user">
+        <field name="name">Estimation User</field>
+        <field name="category_id" ref="arm_customization.module_estimation_category"/>
+    </record>
+    <record model="res.groups" id="group_estimation_manager">
+        <field name="name">Estimation Manger</field>
+        <field name="category_id" ref="arm_customization.module_estimation_category"/>
+        <field name="implied_ids" eval="[(4, ref('arm_customization.group_estimation_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!--    Inspection User Group-->
+    <record model="ir.module.category" id="module_inspection_category">
+        <field name="parent_id" ref="module_project_team_category"/>
+        <field name="name">Inspection</field>
+        <field name="sequence">5</field>
+    </record>
+
+    <record model="res.groups" id="group_inspection_user">
+        <field name="name">Inspection User</field>
+        <field name="category_id" ref="arm_customization.module_inspection_category"/>
+    </record>
+    <record model="res.groups" id="group_inspection_manager">
+        <field name="name">Inspection Manger</field>
+        <field name="category_id" ref="arm_customization.module_inspection_category"/>
+        <field name="implied_ids" eval="[(4, ref('arm_customization.group_inspection_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!--    Engineering User group-->
+    <record model="ir.module.category" id="module_engineer_category">
+        <field name="parent_id" ref="module_project_team_category"/>
+        <field name="name">Engineering</field>
+        <field name="sequence">6</field>
+    </record>
+
+    <record model="res.groups" id="group_engineering_user">
+        <field name="name">Engineering User</field>
+        <field name="category_id" ref="arm_customization.module_engineer_category"/>
+    </record>
+    <record model="res.groups" id="group_engineering_manager">
+        <field name="name">Engineering Manger</field>
+        <field name="category_id" ref="arm_customization.module_engineer_category"/>
+        <field name="implied_ids" eval="[(4, ref('arm_customization.group_engineering_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!--    Production User group-->
+    <record model="ir.module.category" id="module_production_category">
+        <field name="parent_id" ref="module_project_team_category"/>
+        <field name="name">Production</field>
+        <field name="sequence">7</field>
+    </record>
+
+    <record model="res.groups" id="group_production_user">
+        <field name="name">Production User</field>
+        <field name="category_id" ref="arm_customization.module_production_category"/>
+    </record>
+    <record model="res.groups" id="group_production_manager">
+        <field name="name">Production Manger</field>
+        <field name="category_id" ref="arm_customization.module_production_category"/>
+        <field name="implied_ids" eval="[(4, ref('arm_customization.group_production_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!--    Installation User group-->
+    <record model="ir.module.category" id="module_installation_category">
+        <field name="parent_id" ref="module_project_team_category"/>
+        <field name="name">Installation</field>
+        <field name="sequence">8</field>
+    </record>
+
+    <record model="res.groups" id="group_installation_user">
+        <field name="name">Site Supervisor</field>
+        <field name="category_id" ref="arm_customization.module_installation_category"/>
+    </record>
+    <record model="res.groups" id="group_installation_manager">
+        <field name="name">Installation Manger</field>
+        <field name="category_id" ref="arm_customization.module_installation_category"/>
+        <field name="implied_ids" eval="[(4, ref('arm_customization.group_installation_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+    <!--    Installation User group-->
+
+    <record model="ir.module.category" id="module_qa_qc_category">
+        <field name="parent_id" ref="module_project_team_category"/>
+        <field name="name">QA/Qc</field>
+        <field name="sequence">9</field>
+    </record>
+
+    <record model="res.groups" id="group_qa_qc_user">
+        <field name="name">User</field>
+        <field name="category_id" ref="arm_customization.module_qa_qc_category"/>
+    </record>
+    <record model="res.groups" id="group_qa_qc_manager">
+        <field name="name">Manger</field>
+        <field name="category_id" ref="arm_customization.module_qa_qc_category"/>
+        <field name="implied_ids" eval="[(4, ref('arm_customization.group_qa_qc_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record model="ir.module.category" id="module_work_order_category">
+        <field name="parent_id" ref="module_project_team_category"/>
+        <field name="name">Work Order</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record model="res.groups" id="group_work_order_user">
+        <field name="name">Work Order User</field>
+        <field name="category_id" ref="arm_customization.module_work_order_category"/>
+    </record>
+    <record model="res.groups" id="group_work_order_manager">
+        <field name="name">Work Order manager</field>
+        <field name="category_id" ref="arm_customization.module_work_order_category"/>
+        <field name="implied_ids" eval="[(4, ref('arm_customization.group_work_order_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record model="ir.module.category" id="module_operation_category">
+        <field name="parent_id" ref="module_project_team_category"/>
+        <field name="name">Operation</field>
+        <field name="sequence">7</field>
+    </record>
+
+    <record model="res.groups" id="group_operation_user">
+        <field name="name">Operation User</field>
+        <field name="category_id" ref="arm_customization.module_operation_category"/>
+    </record>
+    <record model="res.groups" id="group_operation_manager">
+        <field name="name">Operation Manger</field>
+        <field name="category_id" ref="arm_customization.module_operation_category"/>
+        <field name="implied_ids" eval="[(4, ref('arm_customization.group_operation_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+
+</odoo>
