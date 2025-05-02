@@ -128,6 +128,8 @@
                         invisible="settlement_status != 'pending' or _is_work_task == False or  stage_type != 'built_submission'"/>
                 <widget name="web_ribbon" title="Submit" bg_color="text-bg-success"
                         invisible="settlement_status != 'submit' or _is_work_task == False or  stage_type != 'built_submission'"/>
+                 <widget name="web_ribbon" title="Under Qa/Qc" bg_color="text-bg-danger"
+                        invisible="_is_work_task == False or stage_wk !='qa_qc'"/>
             </xpath>
             <xpath expr="//field[@name='user_ids']" position="attributes">
                 <attribute name="readonly">_is_estimation_task == True or _revision_task == True</attribute>
@@ -308,6 +310,7 @@
                         class="btn-primary"
                         invisible="_is_work_task == False or stage_type!='built_submission' or settlement_status != 'submit'"
                 />
+                <button name="action_create_qa_qc" type="object" string="QA/QC" class="oe_highlight" invisible="_is_work_task == False or stage_type not in ['delivered','mir_approved','eraction','wir','built_submission']"/>
             </xpath>
             <xpath expr="//page[@name='description_page']" position="after">
                 <page name="boq_material_ids" string="BOQ Estimation"
@@ -485,7 +488,7 @@
                 </page>
             </xpath>
             <xpath expr="//field[@name='stage_id']" position="attributes">
-                <attribute name="invisible">_is_estimation_task==True or _revision_task==True</attribute>
+                <attribute name="invisible">_is_estimation_task==True or _revision_task==True or is_qa_qc_task == True</attribute>
             </xpath>
         </field>
     </record>

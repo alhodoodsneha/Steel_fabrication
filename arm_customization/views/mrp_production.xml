@@ -11,6 +11,7 @@
             </xpath>
             <xpath expr="//button[@name='action_confirm']" position="after">
                 <button name="action_material_request" type="object" string="Material Request" class="oe_highlight"/>
+                  <button name="action_create_qa_qc" type="object" string="QA/QC" class="oe_highlight" invisible="state != 'done'"/>
             </xpath>
             <xpath expr="//button[@name='action_view_reception_report']" position="after">
                 <button name="action_open_related_mrq" type="object"

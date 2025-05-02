@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'ARM Customization',
-    'version': '17.0.1.2.9',
+    'version': '17.0.1.3.0',
     'category': 'Sales/CRM',
     'summary': 'ARM Customization',
     'description': 'crm project customization',
@@ -39,7 +39,7 @@
         'views/qa_qc_team.xml',
         'views/project_planning.xml',
         'views/active_project.xml',
-        # 'views/qa_qc_menu.xml',
+        'views/qa_qc_menu.xml',
         'views/account_move.xml',
         'views/purchase_order.xml',
         'views/delivered_menu.xml',

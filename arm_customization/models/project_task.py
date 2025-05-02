@@ -48,7 +48,7 @@ class ProjectTask(models.Model):
     delay = fields.Integer(string="Delay", compute="_compute_delay_project")
     stage_wk = fields.Selection(
         [('waiting', 'Engineering'), ('qa_ist', 'QA/QC'), ('production', 'Production'), ('qa_qc', 'QA/QC'),
-         ('delivered', 'Delivery'),
+         ('delivered', 'Delivery'),('qa_qc_done', 'QA/QC'),
          ('invoiced', 'Invoiced')], string="Stage Work", default='waiting')
     is_mrp_created = fields.Boolean(string="Is Work Order Created", default=False)
     is_eng_task = fields.Boolean(string="Is eng task", default=False)
@@ -286,6 +286,27 @@ class ProjectTask(models.Model):
 
     def action_pass_qa_qc(self):
         self.qa_qc_status = 'pass'
+
+    def action_create_qa_qc(self):
+        sequence_qa_qc_task = self.env['ir.sequence'].next_by_code('project.task.qa')
+        qa_qc_user = self.env['res.users'].search(
+            [('groups_id', '=', self.env.ref('arm_customization.group_qa_qc_manager').id),
+             ('groups_id', '!=', self.env.ref('base.user_admin').id),
+             ('groups_id', 'not in', self.env.ref('base.group_system').id)])
+        if not qa_qc_user:
+            raise UserError(_("No QA/QC User Found !!"))
+        qa_qc_task = self.env['project.task'].sudo().create({
+            'name': sequence_qa_qc_task,
+            'job_qa_name': 'Verification -' + self.name,
+            'sequence_code': sequence_qa_qc_task,
+            'partner_id': self.partner_id.id,
+            'user_ids': [(6, 0, [user.id for user in qa_qc_user])] if qa_qc_user else False,
+            'project_id': self.project_id.id,
+            'wr_qa_project': self.id,
+            'is_qa_qc_task': True,
+            'description': 'Please verify the Assembly Number in - ' + self.name + 'also add timesheet and complete the Qa/Qc  work in ' + self.name
+        })
+        self.stage_wk = 'qa_qc'
 
     def action_fail_qa_qc(self):
         return {
@@ -665,10 +686,10 @@ class ProjectTask(models.Model):
             self.wr_qa_project.stage_wk = 'production'
             self.state = '1_done'
         else:
-            all_factors_positive = all(line.state != 'draft' for line in self.wr_qa_project.assemble_line_ids)
-            if not all_factors_positive:
-                raise UserError("Please Verify all lines !!")
-            self.wr_qa_project.stage_wk = 'delivered'
+            # all_factors_positive = all(line.state != 'draft' for line in self.wr_qa_project.assemble_line_ids)
+            # if not all_factors_positive:
+            #     raise UserError("Please Verify all lines !!")
+            self.wr_qa_project.stage_wk = 'qa_qc_done'
             self.stage_qa = 'completed'
             self.state = '1_done'
 
